@@ -12,8 +12,8 @@
                     {{userData.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="a">退出登录</el-dropdown-item>
                     <el-dropdown-item command="b">编辑资料</el-dropdown-item>
+                    <el-dropdown-item command="a">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
            </el-dropdown>
       </div>
@@ -40,7 +40,7 @@ export default {
                   this.$router.push('/')
                   break
               case 'b':
-                  alert('hello')
+                  this.$router.push('/system/personal')
                   break
           }
       }
@@ -61,9 +61,9 @@ export default {
         margin-left: 25px;
     }
     .rightNav{
-        width: 121px;
+        width: 161px;
         height: 100%;
-        margin-right: 40px;
+        padding-right: 40px;
         display: flex;
         justify-content: flex-start;
         .headImg {

@@ -20,7 +20,5 @@ export default new Vuex.Store({
     clearData: ({ commit }) => {
       commit('SETUSER', null)
     }
-  },
-  modules: {
   }
 })

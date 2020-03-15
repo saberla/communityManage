@@ -14,7 +14,7 @@ const routes = [
     path: '/mainPage',
     name: 'mainPage',
     component: () => import('../components/layout/layout.vue'),
-    redirect: '/system/personal',  //初始化跳珠页
+    redirect: '/system/userManage',  //初始化跳珠页
     children: [
       {
         path: '/system/userManage',  // 用户管理页面

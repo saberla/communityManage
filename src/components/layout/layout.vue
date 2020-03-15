@@ -87,9 +87,9 @@ export default {
 .el-dialog__wrapper{
   // 表单宽高
   .el-input__inner {
-     width: 338px !important;
-     height: 36px !important;
-     border: 1px solid silver !important;
+     width: 338px;
+     height: 36px;
+     border: 1px solid silver;
   }
   // 表单行高
   .el-form-item__content {
