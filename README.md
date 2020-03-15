@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-# communityManage
-毕设前端部分
-=======
-<<<<<<< HEAD
 # communityManage
 毕设前端部分
 =======
