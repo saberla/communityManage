@@ -14,12 +14,17 @@ const routes = [
     path: '/mainPage',
     name: 'mainPage',
     component: () => import('../components/layout/layout.vue'),
-    redirect: '/system/userManage',
+    redirect: '/system/personal',  //初始化跳珠页
     children: [
       {
-        path: '/system/userManage',
+        path: '/system/userManage',  // 用户管理页面
         name: 'system',
         component: () => import('../views/systemSet/userManage.vue')
+      },
+      {
+        path: '/system/personal',  // 个人设置页面
+        name: 'personal',
+        component: () => import('../views/personalSet/person.vue')
       }
     ]
   }
