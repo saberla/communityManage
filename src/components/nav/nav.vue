@@ -9,7 +9,7 @@
           </div>
           <el-dropdown @command="handleCommand" class="drop" trigger="click" placement='bottom-start'>
                 <span class="el-dropdown-link">
-                    {{userData.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{loginUser.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="b">编辑资料</el-dropdown-item>
@@ -29,7 +29,13 @@ export default {
             } else {
                 return {}
             }
+        },
+        loginUser() {
+            return this.$store.getters.getLoginUser
         }
+    },
+    created() {
+        this.getLoginUser()
     },
   methods: {
       handleCommand (command) {
@@ -43,6 +49,20 @@ export default {
                   this.$router.push('/system/personal')
                   break
           }
+      },
+
+      //获取登录用户信息
+      getLoginUser () {
+          let params = {
+              userName: this.userData.userName
+          }
+          this.$axios
+            .post('/user/getLoginUser', params)
+            .then(res => {
+                if(res.data.code === 200) {
+                    this.$store.dispatch('setLoginUser', res.data.user[0])
+                }
+            })
       }
   },
 }

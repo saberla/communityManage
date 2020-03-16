@@ -5,7 +5,7 @@
         <img src="../../assets/用户.png" class="portrait" alt="personImg">
         <p class="userInfo">账号：<span class="rightInfo">{{userData.userName}}</span></p>
         <p class="userInfo">
-          姓名：<span class="rightInfo">{{userData.name}}</span>
+          姓名：<span class="rightInfo">{{loginUser.name}}</span>
           <img src="../../assets/write.png" class="rightImg" @click="updateName" alt="writeImg">
         </p>
         <p class="userInfo">
@@ -104,11 +104,14 @@ export default {
   },
   computed: {
       userData() {
-          if (this.$store.getters.userInfo) {
-              return this.$store.getters.userInfo
-          } else {
-              return {}
-          }
+        if (this.$store.getters.userInfo) {
+            return this.$store.getters.userInfo
+        } else {
+            return {}
+        }
+      },
+      loginUser() {
+        return this.$store.getters.getLoginUser
       }
   },
   methods: {
@@ -128,9 +131,8 @@ export default {
             .post('/user/updateName', params)
             .then(res => {
               if (res.data.code === 200) {
-                this.$store.dispatch('clearData')
-                this.$store.dispatch('setUser', res.data.user)
                 Message.success('修改成功')
+                this.getLoginUser()
                 this.modNameVisible = false
               }
             })
@@ -165,6 +167,20 @@ export default {
           Message.error('请按要求填写必须字段')
         }
       })
+    },
+
+    //获取登录用户信息
+    getLoginUser () {
+        let params = {
+            userName: this.userData.userName
+        }
+        this.$axios
+          .post('/user/getLoginUser', params)
+          .then(res => {
+              if(res.data.code === 200) {
+                  this.$store.dispatch('setLoginUser', res.data.user[0])
+              }
+          })
     }
   },
 }
