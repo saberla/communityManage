@@ -34,6 +34,7 @@
             v-loading="loading"
             ref="multipleTable"
             :data="tableData"
+            :default-sort = "{prop: 'date', order: 'descending'}"
             :header-cell-style="{'background-color':'rgba(232, 232, 232, 1)','color':'rgba(90, 90, 90, 1)'}"
             style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
             <el-table-column prop="userName" label="账号" width="96"></el-table-column>
@@ -42,7 +43,7 @@
             <el-table-column prop="role" label="角色"  width="121"></el-table-column>
             <el-table-column prop="education" label="学历"  width="100"></el-table-column>
             <el-table-column prop="nation" label="民族"  width="100"></el-table-column>
-            <el-table-column prop="date" label="创建日期" width="131"></el-table-column>
+            <el-table-column prop="date" sortable label="创建日期" width="131"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div>
@@ -116,9 +117,6 @@
         width="512px"
         :append-to-body="true">
         <el-form ref="mod_form" v-if="modDialogVisible" :model="mod_dialogData" label-width="86px" :rules="modRules">
-          <el-form-item label="账号：" prop="userName">
-            <el-input v-model="mod_dialogData.userName" placeholder="请输入账号"></el-input>
-          </el-form-item>
           <el-form-item label="姓名：" prop="name">
             <el-input v-model="mod_dialogData.name" placeholder="请输入姓名"></el-input>
           </el-form-item>
@@ -195,7 +193,6 @@ export default {
         nation:''
       },
       mod_dialogData: {
-        userName: '',
         name: '',
         role: '',
         tel: 0,
@@ -254,7 +251,6 @@ export default {
       },
       // 修改用户规则验证
       modRules: {
-        userName: [{ required: true, min: 1, max: 20, message: '请输入1-20字符!', trigger: 'blur' }],
         name: [{
           validator: (rule, value, callback) => {
             if ((/[\u4e00-\u9fa5]{1,20}/).test(value) === false) {
@@ -342,7 +338,6 @@ export default {
     // 编辑用户
     editMeth (row) {
       this.tempRow = row
-      this.mod_dialogData.userName = row.userName
       this.mod_dialogData.name = row.name
       this.mod_dialogData.role = row.role
       this.mod_dialogData.tel = row.tel
@@ -355,7 +350,6 @@ export default {
         if (valid) {
           let params = {
             userName1: this.tempRow.userName,
-            userName: this.mod_dialogData.userName,
             name: this.mod_dialogData.name,
             tel: this.mod_dialogData.tel,
             role: this.mod_dialogData.role,
@@ -417,9 +411,9 @@ export default {
     getUsers () {
       let query1 = {}
       if (this.formData.userName === '' && this.formData.name === '' && this.formData.role === '') query1 = {}
-      if (this.formData.userName !== '') query1.userName = this.formData.userName
-      if (this.formData.name !== '') query1.name = this.formData.name
-      if (this.formData.role !== '') query1.role = this.formData.role
+      if (this.formData.userName !== '') {query1.userName = this.formData.userName,this.paginationObj.currentPage = 1}
+      if (this.formData.name !== '') {query1.name = this.formData.name,this.paginationObj.currentPage = 1}
+      if (this.formData.role !== '') {query1.role = this.formData.role,this.paginationObj.currentPage = 1}
       let params = {
         currentPage: this.paginationObj.currentPage,
         pageSize: this.paginationObj.pageSize,

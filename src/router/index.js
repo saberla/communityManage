@@ -25,6 +25,11 @@ const routes = [
         path: '/system/personal',  // 个人设置页面
         name: 'personal',
         component: () => import('../views/personalSet/person.vue')
+      },
+      {
+        path: '/system/logAudit',  // 日志审计页面
+        name: 'logAudit',
+        component: () => import('../views/systemSet/logAudit.vue')
       }
     ]
   }

@@ -52,7 +52,15 @@ export default {
                         var token = res.data.token
                         localStorage.setItem('loginToken', token)
                         const decode = jwtDecode(token)
-
+                        console.log(decode)
+                        //记录登录日志
+                        this.$axios
+                          .post('/records/writeRecords', decode)
+                          .then(res => {
+                            if (res.data.code === 200) {
+                              console.log('写入记录成功')
+                            }
+                          })
                         // token存到vuex
                         this.$store.dispatch('setUser', decode)
                         this.$router.push('/mainPage')

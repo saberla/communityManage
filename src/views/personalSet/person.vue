@@ -40,7 +40,7 @@
         width="512px"
         custom-class="passWord"
         :append-to-body="true">
-        <el-form ref="pass_form" v-if="modPassVisible" :model="password_data" label-width="86px" :rules="passRules">
+        <el-form ref="pass_form" v-if="modPassVisible" :model="password_data" label-width="100px" :rules="passRules">
           <el-form-item label="设置新密码：" prop="newPass">
             <el-input v-model="password_data.newPass" placeholder="请输入新密码"></el-input>
           </el-form-item>
