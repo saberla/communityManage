@@ -36,11 +36,13 @@
             :data="tableData"
             :header-cell-style="{'background-color':'rgba(232, 232, 232, 1)','color':'rgba(90, 90, 90, 1)'}"
             style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
-            <el-table-column prop="userName" label="账号" width="104"></el-table-column>
+            <el-table-column prop="userName" label="账号" width="96"></el-table-column>
             <el-table-column prop="name" label="姓名" width="131"></el-table-column>
-            <el-table-column prop="tel" label="联系方式" width="151"></el-table-column>
-            <el-table-column prop="role" label="角色" :show-overflow-tooltip='true' width="160"></el-table-column>
-            <el-table-column prop="date" label="创建日期" width="156"></el-table-column>
+            <el-table-column prop="tel" label="联系方式" width="121"></el-table-column>
+            <el-table-column prop="role" label="角色"  width="121"></el-table-column>
+            <el-table-column prop="education" label="学历"  width="100"></el-table-column>
+            <el-table-column prop="nation" label="民族"  width="100"></el-table-column>
+            <el-table-column prop="date" label="创建日期" width="131"></el-table-column>
             <el-table-column label="操作">
               <template slot-scope="scope">
                 <div>
@@ -85,6 +87,20 @@
               <el-option label="领导" value="领导"></el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="学历：" prop="education">
+            <el-select v-model="user_dialogData.education" placeholder="请选择学历">
+              <el-option label="本科" value="本科"></el-option>
+              <el-option label="硕士" value="硕士"></el-option>
+              <el-option label="博士" value="博士"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="民族：" prop="nation">
+            <el-select v-model="user_dialogData.nation" placeholder="请选择民族">
+              <el-option label="汉族" value="汉族"></el-option>
+              <el-option label="维吾尔族" value="维吾尔族"></el-option>
+              <el-option label="羌族" value="羌族"></el-option>
+            </el-select>
+          </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button @click="addDialogVisible = false" class="tableBtn" size="medium" style="width:78px">取消</el-button
@@ -99,7 +115,7 @@
         :visible.sync="modDialogVisible"
         width="512px"
         :append-to-body="true">
-        <el-form ref="mod_form" v-if="modDialogVisible" :model="mod_dialogData" label-width="86px" :rules="addRules">
+        <el-form ref="mod_form" v-if="modDialogVisible" :model="mod_dialogData" label-width="86px" :rules="modRules">
           <el-form-item label="账号：" prop="userName">
             <el-input v-model="mod_dialogData.userName" placeholder="请输入账号"></el-input>
           </el-form-item>
@@ -114,6 +130,20 @@
               <el-option label="网格员用户" value="网格员用户"></el-option>
               <el-option label="查询用户" value="查询用户"></el-option>
               <el-option label="领导" value="领导"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="学历：" prop="education">
+            <el-select v-model="mod_dialogData.education" placeholder="请选择学历">
+              <el-option label="本科" value="本科"></el-option>
+              <el-option label="硕士" value="硕士"></el-option>
+              <el-option label="博士" value="博士"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="民族：" prop="nation">
+            <el-select v-model="mod_dialogData.nation" placeholder="请选择民族">
+              <el-option label="汉族" value="汉族"></el-option>
+              <el-option label="维吾尔族" value="维吾尔族"></el-option>
+              <el-option label="羌族" value="羌族"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -160,13 +190,17 @@ export default {
         name: '',
         password: '123456',
         role: '',
-        tel: 0
+        tel: 0,
+        education: '',
+        nation:''
       },
       mod_dialogData: {
         userName: '',
         name: '',
         role: '',
-        tel: 0
+        tel: 0,
+        education: '',
+        nation:''
       },
       // 新增用户规则验证
       addRules: {
@@ -181,7 +215,7 @@ export default {
           },
           trigger: 'change'
         },
-        { required: true, min: 1, max: 20, message: '请输入4-20字符!', trigger: 'blur' }],
+        { required: true, min: 1, max: 20, message: '请输入1-20字符!', trigger: 'blur' }],
         name: [{
           validator: (rule, value, callback) => {
             if ((/[\u4e00-\u9fa5]{1,20}/).test(value) === false) {
@@ -214,7 +248,48 @@ export default {
           },
           required: true,
           trigger: 'change'
-        }]
+        }],
+        nation: [{ required: true, message: '请选择民族', trigger: 'blur' }],
+        education: [{ required: true, message: '请选择最高学历', trigger: 'blur' }]
+      },
+      // 修改用户规则验证
+      modRules: {
+        userName: [{ required: true, min: 1, max: 20, message: '请输入1-20字符!', trigger: 'blur' }],
+        name: [{
+          validator: (rule, value, callback) => {
+            if ((/[\u4e00-\u9fa5]{1,20}/).test(value) === false) {
+              callback(new Error('请输入1-20字符！'))
+            } else {
+              callback()
+            }
+          },
+          trigger: 'blur',
+          required: true
+        }],
+        tel: [{
+          validator: (rule, value, callback) => {
+            if ((/^1\d{10}$/).test(value) === false) {
+              callback(new Error('请输入11位以1开头的手机号码！'))
+            } else {
+              callback()
+            }
+          },
+          trigger: 'blur',
+          required: true
+        }],
+        role: [{
+          validator: (rule, value, callback) => {
+            if (value === '') {
+              callback(new Error('请选择新增用户角色'))
+            } else {
+              callback()
+            }
+          },
+          required: true,
+          trigger: 'change'
+        }],
+        nation: [{ required: true, message: '请选择民族', trigger: 'blur' }],
+        education: [{ required: true, message: '请选择最高学历', trigger: 'blur' }]
       }
     }
   },
@@ -230,12 +305,14 @@ export default {
     this.tableHeight = height - 284 - 112 + 48 + 'px'
   },
   methods: {
-    // 新增用户
+    // 新增用户 密码默认为123456
     addUserdia () {
       this.user_dialogData.userName = ''
       this.user_dialogData.name = ''
       this.user_dialogData.tel = ''
       this.user_dialogData.role = ''
+      this.user_dialogData.nation = ''
+      this.user_dialogData.education = ''
       this.addDialogVisible = true
     },
     addUser (formName) {
@@ -269,6 +346,8 @@ export default {
       this.mod_dialogData.name = row.name
       this.mod_dialogData.role = row.role
       this.mod_dialogData.tel = row.tel
+      this.mod_dialogData.nation = row.nation
+      this.mod_dialogData.education = row.education
       this.modDialogVisible = true
     },
     modUser (formName) {
@@ -279,7 +358,9 @@ export default {
             userName: this.mod_dialogData.userName,
             name: this.mod_dialogData.name,
             tel: this.mod_dialogData.tel,
-            role: this.mod_dialogData.role
+            role: this.mod_dialogData.role,
+            nation: this.mod_dialogData.nation,
+            education: this.mod_dialogData.education
           }
           this.$axios
             .post('/user/updateUser', params)
