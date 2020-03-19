@@ -30,7 +30,17 @@ const routes = [
         path: '/system/logAudit',  // 日志审计页面
         name: 'logAudit',
         component: () => import('../views/systemSet/logAudit.vue')
-      }
+      },
+      {
+        path: '/system/mechanism',  // 机构管理页面
+        name: 'mechanism',
+        component: () => import('../views/systemSet/mechanism.vue')
+      },
+      {
+        path: '/system/dictionary',  // 字典维护页面
+        name: 'dictionary',
+        component: () => import('../views/systemSet/dictionary.vue')
+      },
     ]
   }
 ]

@@ -36,11 +36,9 @@
         <template slot="title"><span>系统管理</span></template>
         <el-menu-item-group>
           <el-menu-item index="/system/userManage">用户管理</el-menu-item>
-          <el-menu-item index="1-2">机构管理</el-menu-item>
-          <el-menu-item index="1-3">字典维护</el-menu-item>
-          <el-menu-item index="1-4">权限管理</el-menu-item>
+          <el-menu-item index="/system/mechanism">机构管理</el-menu-item>
+          <el-menu-item index="/system/dictionary">字典维护</el-menu-item>
           <el-menu-item index="1-5">数据管理</el-menu-item>
-          <el-menu-item index="1-6">密码管理</el-menu-item>
           <el-menu-item index="/system/logAudit">日志审计</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
