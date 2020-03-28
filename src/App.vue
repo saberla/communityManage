@@ -13,6 +13,22 @@ export default {
       const decode = jwtDecode(localStorage.getItem('loginToken'))
       this.$store.dispatch('setUser', decode)
     }
+    // 初始获取字典数据并存到vuex
+    this.getDic()
+  },
+  methods: {
+    // 获取字典数据
+    getDic () {
+      this.$axios
+        .post('/dictionary/getDic',{})
+        .then(res => {
+          if (res.data.code === 200) {
+            console.log(res.data.dic)
+            this.$store.dispatch('setNations', res.data.dic[0].insideData)
+            this.$store.dispatch('setEdus', res.data.dic[1].insideData)
+          }
+        })
+    },
   },
 }
 </script>

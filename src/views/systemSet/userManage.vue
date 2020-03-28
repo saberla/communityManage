@@ -34,7 +34,7 @@
             v-loading="loading"
             ref="multipleTable"
             :data="tableData"
-            :default-sort = "{prop: 'date', order: 'descending'}"
+            :default-sort = "{prop: 'date'}"
             :header-cell-style="{'background-color':'rgba(232, 232, 232, 1)','color':'rgba(90, 90, 90, 1)'}"
             style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
             <el-table-column prop="userName" label="账号" width="96"></el-table-column>
@@ -90,16 +90,22 @@
           </el-form-item>
           <el-form-item label="学历：" prop="education">
             <el-select v-model="user_dialogData.education" placeholder="请选择学历">
-              <el-option label="本科" value="本科"></el-option>
-              <el-option label="硕士" value="硕士"></el-option>
-              <el-option label="博士" value="博士"></el-option>
+              <el-option 
+                v-for="item in edus" 
+                :key="item.id"
+                :label="item.option"
+                :value="item.option">
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="民族：" prop="nation">
             <el-select v-model="user_dialogData.nation" placeholder="请选择民族">
-              <el-option label="汉族" value="汉族"></el-option>
-              <el-option label="维吾尔族" value="维吾尔族"></el-option>
-              <el-option label="羌族" value="羌族"></el-option>
+              <el-option 
+                v-for="item in nations" 
+                :key="item.id"
+                :label="item.option"
+                :value="item.option">
+              </el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -132,16 +138,22 @@
           </el-form-item>
           <el-form-item label="学历：" prop="education">
             <el-select v-model="mod_dialogData.education" placeholder="请选择学历">
-              <el-option label="本科" value="本科"></el-option>
-              <el-option label="硕士" value="硕士"></el-option>
-              <el-option label="博士" value="博士"></el-option>
+              <el-option 
+                v-for="item in edus" 
+                :key="item.id"
+                :label="item.option"
+                :value="item.option">
+              </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="民族：" prop="nation">
             <el-select v-model="mod_dialogData.nation" placeholder="请选择民族">
-              <el-option label="汉族" value="汉族"></el-option>
-              <el-option label="维吾尔族" value="维吾尔族"></el-option>
-              <el-option label="羌族" value="羌族"></el-option>
+              <el-option 
+                v-for="item in nations" 
+                :key="item.id"
+                :label="item.option"
+                :value="item.option">
+              </el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -292,7 +304,16 @@ export default {
   components: {
     pagination
   },
+  computed: {
+    nations() {
+      return this.$store.getters.getNation
+    },
+    edus() {
+      return this.$store.getters.getEdu
+    }
+  },
   created() {
+    console.log(this.nations,this.edus)
     this.getUsers()
   },
   mounted () {
