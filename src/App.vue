@@ -23,7 +23,6 @@ export default {
         .post('/dictionary/getDic',{})
         .then(res => {
           if (res.data.code === 200) {
-            console.log(res.data.dic)
             this.$store.dispatch('setNations', res.data.dic[0].insideData)
             this.$store.dispatch('setEdus', res.data.dic[1].insideData)
           }

@@ -57,29 +57,14 @@ export default {
   border: 1px solid rgba(217,217,217,1);
   border-radius:4px;
   overflow: auto;
-  th{
-    padding: 0 ;
-    height: 40px;
-    line-height: 40px;
-    background-color: #E8E8E8;
-    .cell{
-      font-weight: 600;
-      color: #5A5A5A;
-      font-size: 13px
-    }
-  }
-  td{
+  .el-table__header tr,.el-table__header th {
     padding: 0;
-    height: 60px;
-    line-height: 60px;
-    .cell{
-      height: 32px;
-      line-height: 32px;
-      color: #5A5A5A;
-    }
+    height: 40px;
   }
-  .el-table .cell {
-    padding-left: 16px;
+  .el-table__body tr,.el-table__body td {
+    height: 60px !important;
+    padding: 0;
+    color: rgba(90, 90, 90, 1);
   }
 }
 
@@ -125,6 +110,20 @@ export default {
   .el-dialog__footer {
     padding: 0 0 20px 0;
     text-align: center;
+  }
+}
+
+//标题
+h1, h2, h3 {
+  margin: 12px 0;
+}
+//删除弹框 图标
+.delete_icon{
+  .el-message-box__message{
+    > p {
+      background:url('../../assets/deleteIcon.png') no-repeat left center;
+      padding-left: 32px;
+    }
   }
 }
 </style>

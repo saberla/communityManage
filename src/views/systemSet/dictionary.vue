@@ -46,7 +46,7 @@
           <el-table-column label="序号" type="index" width="216"></el-table-column>
           <el-table-column label="字典名称" prop="dictionaryName" width="216"></el-table-column>
           <el-table-column label="字典类型" prop="dictionaryType" width="216"></el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="modDic(scope.row)">修改</el-button
               ><el-button size="mini" @click="deleteDic(scope.row)">删除</el-button>

@@ -14,7 +14,7 @@ const routes = [
     path: '/mainPage',
     name: 'mainPage',
     component: () => import('../components/layout/layout.vue'),
-    redirect: '/system/userManage',  //初始化跳珠页
+    redirect: '/system/userManage',  //初始化跳转页
     children: [
       {
         path: '/system/userManage',  // 用户管理页面
@@ -40,7 +40,16 @@ const routes = [
         path: '/system/dictionary',  // 字典维护页面
         name: 'dictionary',
         component: () => import('../views/systemSet/dictionary.vue')
-      },
+      }
+
+      
+      
+      // // 街道办及各种机构
+      // {
+      //   path: '/system/mechanism/xinduStreet',
+      //   name: 'xindu',
+      //   component: () => import('../views/systemSet/mechanism/xinduStreet')
+      // }
     ]
   }
 ]

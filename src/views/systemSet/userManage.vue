@@ -44,7 +44,7 @@
             <el-table-column prop="education" label="学历"  width="100"></el-table-column>
             <el-table-column prop="nation" label="民族"  width="100"></el-table-column>
             <el-table-column prop="date" sortable label="创建日期" width="131"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column label="操作" fixed="right">
               <template slot-scope="scope">
                 <div>
                   <el-button class="short_btn" size="mini" type="primary" @click="editMeth(scope.row)">
@@ -313,7 +313,6 @@ export default {
     }
   },
   created() {
-    console.log(this.nations,this.edus)
     this.getUsers()
   },
   mounted () {
