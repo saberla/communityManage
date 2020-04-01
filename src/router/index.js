@@ -16,6 +16,7 @@ const routes = [
     component: () => import('../components/layout/layout.vue'),
     redirect: '/system/userManage',  //初始化跳转页
     children: [
+      // 系统设置
       {
         path: '/system/userManage',  // 用户管理页面
         name: 'system',
@@ -40,8 +41,14 @@ const routes = [
         path: '/system/dictionary',  // 字典维护页面
         name: 'dictionary',
         component: () => import('../views/systemSet/dictionary.vue')
-      }
+      },
 
+      // 小区治理
+      {
+        path: '/community/communityManage',
+        name: 'communityManage',
+        component: () => import('../views/communityManage/community.vue')
+      }
       
       
       // // 街道办及各种机构

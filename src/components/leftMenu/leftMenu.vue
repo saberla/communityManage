@@ -16,7 +16,7 @@
       <el-submenu index="2">
         <template slot="title"><span>小区治理</span></template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">小区建档</el-menu-item>
+          <el-menu-item index="/community/communityManage">小区建档</el-menu-item>
           <el-menu-item index="1-2">人员建档</el-menu-item>
           <el-menu-item index="1-3">房屋建档</el-menu-item>
           <el-menu-item index="1-4">信息查询</el-menu-item>
@@ -38,7 +38,7 @@
           <el-menu-item index="/system/userManage">用户管理</el-menu-item>
           <el-menu-item index="/system/mechanism">机构管理</el-menu-item>
           <el-menu-item index="/system/dictionary">字典维护</el-menu-item>
-          <el-menu-item index="1-5">数据管理</el-menu-item>
+          <el-menu-item index="/system/dictionary">数据管理</el-menu-item>
           <el-menu-item index="/system/logAudit">日志审计</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
