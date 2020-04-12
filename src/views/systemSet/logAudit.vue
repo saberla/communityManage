@@ -1,6 +1,6 @@
 <template>
   <div class="logAudit">
-    <el-tabs v-model="activeName" class="">
+    <el-tabs v-model="activeName">
       <el-tab-pane label="登录日志" name="first">
         <div class="loginContainer">
           <!-- 表格 -->

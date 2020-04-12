@@ -3,7 +3,7 @@
     <div class="community_header">
       <p>小区建档</p>
     </div>
-    <div class="community_content">
+    <div class="community_content" v-if="!detailState">
       <h2 style="diplay:inline-block;text-align:center">成都市新都区新都街道小区信息统计</h2>
       <div class="communityBtn" style="padding-left:24px;padding-top:12px">
         <el-button type="primary" @click="addCommunity()" size="mini">新增小区</el-button>
@@ -25,7 +25,7 @@
                 <el-button class="short_btn" size="mini" type="primary" @click="editMeth(scope.row)">
                   编辑
                 </el-button
-                ><el-button class="long_btn" size="mini" @click="resetMeth(scope.row)">
+                ><el-button class="long_btn" size="mini" @click="openDetail(scope.row)">
                   详情
                 </el-button
                 ><el-button class="short_btn" size="mini"  @click="delMeth(scope.row)">
@@ -91,19 +91,25 @@
         </span>
       </el-dialog>
     </div>
+
+    <!-- 小区建设详情 -->
+    <detailPage :mainPage='mainPageValue' v-if="detailState" @setDetailValue='getValue'></detailPage>
   </div>
 </template>
 
 <script>
 import { Message } from 'element-ui'
+import detailPage from '../../components/detail/communityDetail/commonHeader'
 export default {
   data () {
     return {
+      detailState: false,
       loading: false,
       tableData: [],
       tempName: '',
       addDialogVisible: false,
       modDialogVisible: false,
+      mainPageValue: {},
       // 新增dialog
       user_dialogData: {
         communityName: '',
@@ -158,8 +164,11 @@ export default {
         communityAdd: [{ required: true, message: '请输入小区地址', trigger: 'blur' }],
         developCompany: [{ required: true, message: '请输入小区开发商', trigger: 'blur' }],
         property: [{ required: true, message: '请输入物业团队', trigger: 'blur' }]
-      },
+      }
     }
+  },
+  components: {
+    detailPage
   },
   created() {
     this.getCommunity()
@@ -271,6 +280,20 @@ export default {
             this.tableData = res.data.com
           }
         })
+    },
+
+    // 打开小区详情页面
+    openDetail (row) {
+      let obj = {
+        communityName: row.communityName
+      }
+      this.mainPageValue = obj
+      this.detailState = true
+    },
+    
+    // 详情数据
+    getValue (value) {
+      this.detailState = value
     }
   },
 }

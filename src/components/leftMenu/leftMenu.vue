@@ -17,8 +17,6 @@
         <template slot="title"><span>小区治理</span></template>
         <el-menu-item-group>
           <el-menu-item index="/community/communityManage">小区建档</el-menu-item>
-          <el-menu-item index="1-2">人员建档</el-menu-item>
-          <el-menu-item index="1-3">房屋建档</el-menu-item>
           <el-menu-item index="1-4">信息查询</el-menu-item>
           <el-menu-item index="1-5">信息统计</el-menu-item>
         </el-menu-item-group>

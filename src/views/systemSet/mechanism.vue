@@ -187,7 +187,6 @@ export default {
   methods: {
     // 打开详情页
     openDetail(row) {
-      console.log(row)
       let obj = {
         mechaName: row.mechaName,
         reportTime: row.date,

@@ -62,7 +62,7 @@ export default {
     height: 40px;
   }
   .el-table__body tr,.el-table__body td {
-    height: 60px !important;
+    height: 56px !important;
     padding: 0;
     color: rgba(90, 90, 90, 1);
   }
