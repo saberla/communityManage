@@ -137,7 +137,11 @@ export default {
   created() {
     this.getCars()
   },
-
+  computed: {
+    loginUser() {
+      return this.$store.getters.getLoginUser
+    }
+  },
   methods: {
     // 获取当前小区的车辆信息
     getCars () {
@@ -172,6 +176,7 @@ export default {
       this.addDialogVisible = true
     },
     addCarFinal (formName) {
+      this.loginUser.operate = '小区治理-车辆建档'
       let params = {
         communityName: this.mainPage.communityName,
         carNum: this.add_dialogData.carNum,
@@ -187,6 +192,7 @@ export default {
                 Message.success('车辆建档成功')
                 this.getCars()
                 this.addDialogVisible = false
+                this.writeOpLog(this.loginUser)
               }
             })
             .catch(err => {console.log('错误', err)})
@@ -203,6 +209,7 @@ export default {
       this.modDialogVisible = true
     },
     modCarFinal (formName) {
+      this.loginUser.operate = '小区治理-修改车辆信息'
       let params = {
         communityName: this.mainPage.communityName,
         carNum: this.mod_dialogData.carNum,
@@ -219,6 +226,7 @@ export default {
                 Message.success('修改信息成功')
                 this.getCars()
                 this.modDialogVisible = false
+                this.writeOpLog(this.loginUser)
               } 
             })
             .catch(err => {console.log('错误：', err)})
@@ -228,6 +236,7 @@ export default {
 
     // 删除车辆
     delMeth (row) {
+      this.loginUser.operate = '小区治理-删除车辆信息'
       this.$confirm('删除后不可恢复，确定要删除吗？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -244,6 +253,7 @@ export default {
               })
               this.paginationObj.currentPage = 1
               this.getCars()
+              this.writeOpLog(this.loginUser)
             }
           })
       }).catch(() => {

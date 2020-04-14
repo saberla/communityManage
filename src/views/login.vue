@@ -52,7 +52,6 @@ export default {
                         var token = res.data.token
                         localStorage.setItem('loginToken', token)
                         const decode = jwtDecode(token)
-                        console.log(decode)
                         //记录登录日志
                         this.$axios
                           .post('/records/writeRecords', decode)

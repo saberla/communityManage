@@ -179,6 +179,11 @@ export default {
     this.getPerons()
   },
 
+  computed: {
+    loginUser() {
+      return this.$store.getters.getLoginUser
+    }
+  },
   methods: {
     // 获取当前小区的人员信息
     getPerons () {
@@ -214,6 +219,7 @@ export default {
       this.addDialogVisible = true
     },
     addPersonFinal (formName) {
+      this.loginUser.operate = '小区治理-人员建档'
       let params = {
         communityName: this.mainPage.communityName,
         personAdd: this.add_dialogData.personAdd,
@@ -230,6 +236,7 @@ export default {
                 Message.success('人员建档成功')
                 this.getPerons()
                 this.addDialogVisible = false
+                this.writeOpLog(this.loginUser)
               }
             })
             .catch(err => {console.log('错误', err)})
@@ -247,6 +254,7 @@ export default {
       this.modDialogVisible = true
     },
     modPersonFinal (formName) {
+      this.loginUser.operate = '小区治理-修改人员信息'
       let params = {
         communityName: this.mainPage.communityName,
         personName: this.mod_dialogData.personName,
@@ -263,6 +271,7 @@ export default {
                 Message.success('修改信息成功')
                 this.getPerons()
                 this.modDialogVisible = false
+                this.writeOpLog(this.loginUser)
               } 
             })
             .catch(err => {console.log('错误：', err)})
@@ -272,6 +281,7 @@ export default {
 
     // 删除人员
     delMeth (row) {
+      this.loginUser.operate = '小区治理-删除人员'
       this.$confirm('删除后不可恢复，确定要删除吗？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -288,6 +298,7 @@ export default {
               })
               this.paginationObj.currentPage = 1
               this.getPerons()
+              this.writeOpLog(this.loginUser)
             }
           })
       }).catch(() => {

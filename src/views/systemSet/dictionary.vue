@@ -101,7 +101,7 @@
         :visible.sync="mod_dialogVisible"
         width="512px"
         :append-to-body="true">
-        <el-form v-if="mod_dialogVisible" ref="mod_form" :model="mod_dialogData" label-width="86px" :rules="addRules">
+        <el-form v-if="mod_dialogVisible" ref="mod_form" :model="mod_dialogData" label-width="86px" :rules="modRules">
           <el-form-item label="字典名称：" prop="dicName">
             <el-input v-model="mod_dialogData.dicName" placeholder="请输入字典名称"></el-input>
           </el-form-item>
@@ -144,6 +144,8 @@ export default {
       tableData:[],
       tempRow: {}, // 保存当前展开的行
       tempDictionaryName: '',
+      tempModName: '',
+      tempModType: '',
       tempOption: '',
       addDialogVisible: false,
       addDetailVisible: false,
@@ -190,13 +192,39 @@ export default {
         },
         { required: true, message: '请输入字典类型', trigger: 'change' }]
       },
+      modRules: {
+        dicName: [{
+          validator: (rule, value, callback) => {
+            for (let item in this.tableData) {
+              if (value === this.tableData[item].dictionaryName && value !== this.tempModName) {
+                callback(new Error('该字典已存在，请重新输入！'))
+              }
+            }
+            callback()
+          },
+          trigger: 'change'
+        },
+        { required: true, message: '请输入字典名称', trigger: 'change' }],
+        dicType: [{
+          validator: (rule, value, callback) => {
+            for (let item in this.tableData) {
+              if (value === this.tableData[item].dictionaryType && value !== this.tempModType) {
+                callback(new Error('该字典类型已存在，请重新输入！'))
+              }
+            }
+            callback()
+          },
+          trigger: 'change'
+        },
+        { required: true, message: '请输入字典类型', trigger: 'change' }]
+      },
       rulesDetail: {
         option: [{
           validator: (rule, value, callback) => {
             for (let i = 0; i < this.tableData.length; i++) {
               for (let j = 0; j < this.tableData[i].insideData.length; j++) {
                 if (this.tableData[i].isExpand === true) {
-                  if (value === this.tableData[i].insideData[j].option) {
+                  if (value === this.tableData[i].insideData[j].option && value !== this.tempOption) {
                     callback(new Error('该选项已存在，请重新输入！'))
                   }
                 }
@@ -216,6 +244,11 @@ export default {
       this.$set(this.tableData[item],'isExpand', false)
     }
     this.getDic()
+  },
+  computed: {
+    loginUser() {
+      return this.$store.getters.getLoginUser
+    }
   },
   methods: {
     // 行展开方法
@@ -250,6 +283,7 @@ export default {
         dictionaryName: this.add_dialogData.dicName,
         dictionaryType: this.add_dialogData.dicType
       }
+      this.loginUser.operate = '字典管理-新增字典'
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.$axios
@@ -258,6 +292,7 @@ export default {
               if (res.data.code === 200) {
                 this.getDic()
                 this.addDialogVisible = false
+                this.writeOpLog(this.loginUser)
               }
             })
         }
@@ -271,6 +306,7 @@ export default {
       this.addDetailVisible = true
     },
     addDetailDicFinal (formName) {
+      this.loginUser.operate = '字典管理-新增字典明细'
       let params = {
         dictionaryName: this.tempRow.dictionaryName,
         dictionaryType: this.tempRow.dictionaryType,
@@ -284,6 +320,7 @@ export default {
               if(res.data.code === 200) {
                 this.getDic()
                 this.addDetailVisible = false
+                this.writeOpLog(this.loginUser)
               }
             })
         }
@@ -292,13 +329,16 @@ export default {
 
     // 修改字典
     modDic(row) {
+      this.tempModName = row.dictionaryName
+      this.tempModType = row.dictionaryType
       this.mod_dialogData.dicName = row.dictionaryName
       this.mod_dialogData.dicType = row.dictionaryType
       this.mod_dialogVisible = true
     },
     editFinal (formName) {
+      this.loginUser.operate = '字典管理-修改字典'
       let params = {
-        dictionaryName1: this.tempDictionaryName,
+        dictionaryName1: this.tempModName,
         dictionaryName: this.mod_dialogData.dicName,
         dictionaryType: this.mod_dialogData.dicType
       }
@@ -310,6 +350,7 @@ export default {
               if(res.data.code === 200) {
                 this.getDic()
                 this.mod_dialogVisible = false
+                this.writeOpLog(this.loginUser)
               }
             })
         }
@@ -323,6 +364,7 @@ export default {
       this.mod_detailVisible = true
     },
     modDetailDicFinal (formName) {
+      this.loginUser.operate = '字典管理-修改字典明细'
       let params = {
         dictionaryName: this.tempDictionaryName,
         option1: this.tempOption,
@@ -336,6 +378,7 @@ export default {
               if(res.data.code === 200) {
                 this.getDic()
                 this.mod_detailVisible = false
+                this.writeOpLog(this.loginUser)
               }
             })
         }
@@ -344,6 +387,7 @@ export default {
 
     // 删除字典
     deleteDic(row) {
+      this.loginUser.operate = '字典管理-删除字典'
       this.$confirm('删除后不可恢复，确定要删除吗？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -359,6 +403,7 @@ export default {
                 message: '删除成功!'
               })
               this.getDic()
+              this.writeOpLog(this.loginUser)
             }
           })
       }).catch(() => {
@@ -371,6 +416,7 @@ export default {
 
     //删除字典明细
     deleteDetail(row) {
+      this.loginUser.operate = '字典管理-删除字典明细'
       let params = {
         dictionaryName: this.tempDictionaryName,
         option: row.option
@@ -390,6 +436,7 @@ export default {
                 message: '删除成功!'
               })
               this.getDic()
+              this.writeOpLog(this.loginUser)
             }
           })
       }).catch(() => {

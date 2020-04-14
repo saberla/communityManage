@@ -184,6 +184,11 @@ export default {
   created() {
     this.getStreets()
   },
+  computed: {
+    loginUser() {
+      return this.$store.getters.getLoginUser
+    }
+  },
   methods: {
     // 打开详情页
     openDetail(row) {
@@ -229,6 +234,7 @@ export default {
         responsibility: this.street_dialogData.responsibility,
         chargePerson: this.street_dialogData.chargePerson
       }
+      this.loginUser.operate = '机构管理-新增街道办'
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$axios
@@ -238,6 +244,7 @@ export default {
                 this.getStreets()
                 this.addDialogVisible =  false
                 Message.success('新增成功')
+                this.writeOpLog(this.loginUser)
               }
             })
         }
@@ -254,6 +261,7 @@ export default {
       this.modDialogVisible = true
     },
     modStreetFinal (formName) {
+      this.loginUser.operate = '机构管理-编辑街道办'
       let params = {
         indexNum1: this.tempIndexNum,
         indexNum: this.mod_dialogData.indexNum,
@@ -270,6 +278,7 @@ export default {
                 this.modDialogVisible = false
                 this.getStreets()
                 Message.success('修改成功')
+                this.writeOpLog(this.loginUser)
               }
             })
         }
@@ -278,6 +287,7 @@ export default {
 
     // 删除街道办
     delMeth (row) {
+      this.loginUser.operate = '机构管理-删除街道办'
       this.$confirm('删除后不可恢复，确定要删除吗？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -293,6 +303,7 @@ export default {
                 message: '删除成功!'
               })
               this.getStreets()
+              this.writeOpLog(this.loginUser)
             }
           })
       }).catch(() => {

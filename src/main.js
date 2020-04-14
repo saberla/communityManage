@@ -40,6 +40,17 @@ axios.defaults.baseURL = 'http://localhost:5000/api'
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(elementUI)
+// 全局记录操作日志方法
+Vue.prototype.writeOpLog = function(params) {
+  this.$axios
+  .post('/opRecords/writeRecords', params)
+  .then(res => {
+    if (res.data.code === 200) {
+      console.log('记录成功')
+    }
+  })
+  .catch(err => {console.log('操作记录出错', err)})
+}
 
 new Vue({
   router,

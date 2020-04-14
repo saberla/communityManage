@@ -173,6 +173,11 @@ export default {
   created() {
     this.getCommunity()
   },
+  computed: {
+    loginUser() {
+      return this.$store.getters.getLoginUser
+    }
+  },
   methods: {
     // 新增小区
     addCommunity() {
@@ -183,6 +188,7 @@ export default {
       this.addDialogVisible = true
     },
     addCommunityFinal (formName) {
+      this.loginUser.operate = '小区治理-小区建档'
       let params = {
         communityName: this.user_dialogData.communityName,
         communityAdd: this.user_dialogData.communityAdd,
@@ -198,6 +204,7 @@ export default {
                 this.getCommunity()
                 this.addDialogVisible = false
                 Message.success('小区建档成功')
+                this.writeOpLog(this.loginUser)
               }
             })
             .catch(err => {
@@ -217,6 +224,7 @@ export default {
       this.modDialogVisible = true
     },
     modCommunity(formName) {
+      this.loginUser.operate = '小区治理-修改小区信息'
       let params = {
         communityName1: this.tempName,
         communityName: this.mod_dialogData.communityName,
@@ -233,6 +241,7 @@ export default {
                 this.getCommunity()
                 Message.success('修改成功')
                 this.modDialogVisible = false
+                this.writeOpLog(this.loginUser)
               }
             })
             .catch(err => {
@@ -244,6 +253,7 @@ export default {
 
     // 删除小区
     delMeth (row) {
+      this.loginUser.operate = '小区治理-删除小区'
       this.$confirm('删除后不可恢复，确定要删除吗？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -259,6 +269,7 @@ export default {
                 message: '删除成功!'
               })
               this.getCommunity()
+              this.writeOpLog(this.loginUser)
             }
           })
       }).catch(() => {

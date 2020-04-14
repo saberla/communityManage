@@ -310,6 +310,9 @@ export default {
     },
     edus() {
       return this.$store.getters.getEdu
+    },
+    loginUser() {
+      return this.$store.getters.getLoginUser
     }
   },
   created() {
@@ -332,6 +335,7 @@ export default {
       this.addDialogVisible = true
     },
     addUser (formName) {
+      this.loginUser.operate = '用户管理-新增用户'
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.$axios
@@ -340,6 +344,7 @@ export default {
               if (res.data.code === 200) {
                 Message.success('新增成功')
                 this.getUsers()
+                this.writeOpLog(this.loginUser)
                 this.addDialogVisible = false
               } else {
                 Message.error('该账号已存在')
@@ -366,6 +371,7 @@ export default {
       this.modDialogVisible = true
     },
     modUser (formName) {
+      this.loginUser.operate = '用户管理-编辑用户'
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let params = {
@@ -382,6 +388,7 @@ export default {
               if (res.data.code === 200) {
                 Message.success('修改成功')
                 this.getUsers()
+                this.writeOpLog(this.loginUser)
                 this.modDialogVisible = false
               }
             })
@@ -394,6 +401,7 @@ export default {
 
     // 重置密码
     resetMeth (row) {
+      this.loginUser.operate = '用户管理-重置密码'
       this.$confirm(`确定要将${row.name}的密码重置为：123456吗？`, '重置密码', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -411,6 +419,7 @@ export default {
                 type: 'success',
                 message: '操作成功!'
               })
+              this.writeOpLog(this.loginUser)
             }
           })
           .catch(err => {console.log('发生错误：',err)})
@@ -457,6 +466,7 @@ export default {
 
     // 删除用户
     delMeth (row) {
+      this.loginUser.operate = '用户管理-删除用户'
       this.$confirm('删除后不可恢复，确定要删除吗？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -472,6 +482,7 @@ export default {
                 message: '删除成功!'
               })
               this.getUsers()
+              this.writeOpLog(this.loginUser)
             }
           })
       }).catch(() => {

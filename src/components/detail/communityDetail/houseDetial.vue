@@ -175,6 +175,11 @@ export default {
   created() {
     this.getHouses()
   },
+  computed: {
+    loginUser() {
+      return this.$store.getters.getLoginUser
+    }
+  },
   methods: {
     // 获取当前小区的房屋信息
     getHouses () {
@@ -209,6 +214,7 @@ export default {
       this.addDialogVisible = true
     },
     addHouseFinal (formName) {
+      this.loginUser.operate = '小区治理-房屋建档'
       let params = {
         communityName: this.mainPage.communityName,
         houseNum: this.add_dialogData.houseNum,
@@ -224,6 +230,7 @@ export default {
                 Message.success('房屋建档成功')
                 this.getHouses()
                 this.addDialogVisible = false
+                this.writeOpLog(this.loginUser)
               } else {
                 Message.error('与已有房屋信息重合')
               }
@@ -241,6 +248,7 @@ export default {
       this.modDialogVisible = true
     },
     modHouseFinal (formName) {
+      this.loginUser.operate = '小区治理-修改房屋信息'
       let params = {
         communityName: this.mainPage.communityName,
         houseNum: this.mod_dialogData.houseNum,
@@ -252,9 +260,10 @@ export default {
             .post('/house/modHouse', params)
             .then(res => {
               if (res.data.code === 200) {
-                Message.success('编辑房屋信息成功')
+                Message.success('修改房屋信息成功')
                 this.getHouses()
                 this.modDialogVisible = false
+                this.writeOpLog(this.loginUser)
               } 
             })
             .catch(err => {console.log('错误：', err)})
