@@ -19,16 +19,16 @@
     </div>
     <div class="detailContent">
       <el-tabs v-model="activeName">
-      <el-tab-pane label="房屋建档" name="first">
-        <house :mainPage='mainPage' @houseTotal='getHouses'></house>
-      </el-tab-pane>
-      <el-tab-pane label="人员建档" name="second">
-        <person :mainPage='mainPage' @personTotal='getPersons'></person>
-      </el-tab-pane>
-      <el-tab-pane label="车辆建档" name="third">
-        <car :mainPage='mainPage' @carTotal='getCars'></car>
-      </el-tab-pane>
-    </el-tabs>
+        <el-tab-pane label="房屋建档" name="first">
+          <house :mainPage='mainPage' @houseTotal='getHouses'></house>
+        </el-tab-pane>
+        <el-tab-pane label="人员建档" name="second">
+          <person :mainPage='mainPage' @personTotal='getPersons'></person>
+        </el-tab-pane>
+        <el-tab-pane label="车辆建档" name="third">
+          <car :mainPage='mainPage' @carTotal='getCars'></car>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>

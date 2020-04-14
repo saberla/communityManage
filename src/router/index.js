@@ -48,15 +48,15 @@ const routes = [
         path: '/community/communityManage',
         name: 'communityManage',
         component: () => import('../views/communityManage/community.vue')
+      },
+      {
+        path: '/community/infoSearch',
+        name: 'infoSearch',
+        component: () => import('../views/communityManage/infoSearch.vue')
       }
       
       
-      // // 街道办及各种机构
-      // {
-      //   path: '/system/mechanism/xinduStreet',
-      //   name: 'xindu',
-      //   component: () => import('../views/systemSet/mechanism/xinduStreet')
-      // }
+      
     ]
   }
 ]
