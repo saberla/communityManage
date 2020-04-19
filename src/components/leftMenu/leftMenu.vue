@@ -8,9 +8,9 @@
       <el-submenu index="1">
         <template slot="title"><span>信息门户</span></template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">网格门户</el-menu-item>
-          <el-menu-item index="1-2">查询门户</el-menu-item>
-          <el-menu-item index="1-3">领导大屏</el-menu-item>
+          <el-menu-item index="/system/mechanism">网格门户</el-menu-item>
+          <el-menu-item index="/system/mechanism">查询门户</el-menu-item>
+          <el-menu-item index="/system/mechanism">领导大屏</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">
@@ -18,16 +18,16 @@
         <el-menu-item-group>
           <el-menu-item index="/community/communityManage">小区建档</el-menu-item>
           <el-menu-item index="/community/infoSearch">信息查询</el-menu-item>
-          <el-menu-item index="1-5">信息统计</el-menu-item>
+          <el-menu-item index="/community/infoSearch">信息统计</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="3">
         <template slot="title"><span>综治管理</span></template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">网格管理</el-menu-item>
-          <el-menu-item index="1-2">任务管理</el-menu-item>
-          <el-menu-item index="1-3">人员考核</el-menu-item>
-          <el-menu-item index="1-4">信息报送</el-menu-item>
+          <el-menu-item index="/system/mechanism">网格管理</el-menu-item>
+          <el-menu-item index="/system/mechanism">任务管理</el-menu-item>
+          <el-menu-item index="/system/mechanism">人员考核</el-menu-item>
+          <el-menu-item index="/system/mechanism">信息报送</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="4">
