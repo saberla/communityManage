@@ -45,14 +45,21 @@ const routes = [
 
       // 小区治理
       {
-        path: '/community/communityManage',
+        path: '/community/communityManage', // 建档
         name: 'communityManage',
         component: () => import('../views/communityManage/community.vue')
       },
       {
-        path: '/community/infoSearch',
+        path: '/community/infoSearch',  // 信息查询
         name: 'infoSearch',
         component: () => import('../views/communityManage/infoSearch.vue')
+      },
+
+      // 综治管理
+      {
+        path: '/comprehensive/girdManage',
+        name: 'gridManage',
+        component: () => import('../views/comprehensive/gridManage.vue')
       }
       
       

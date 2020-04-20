@@ -222,7 +222,7 @@ export default {
             }
             callback()
           },
-          trigger: 'change'
+          trigger: 'blur'
         },
         { required: true, min: 1, max: 20, message: '请输入1-20字符!', trigger: 'blur' }],
         name: [{
@@ -256,7 +256,7 @@ export default {
             }
           },
           required: true,
-          trigger: 'change'
+          trigger: 'blur'
         }],
         nation: [{ required: true, message: '请选择民族', trigger: 'blur' }],
         education: [{ required: true, message: '请选择最高学历', trigger: 'blur' }]

@@ -25,6 +25,7 @@ export default {
           if (res.data.code === 200) {
             this.$store.dispatch('setNations', res.data.dic[0].insideData)
             this.$store.dispatch('setEdus', res.data.dic[1].insideData)
+            this.$store.dispatch('setGird', res.data.dic[2].insideData)
           }
         })
     },

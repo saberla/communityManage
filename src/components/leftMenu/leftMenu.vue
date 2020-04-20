@@ -24,7 +24,7 @@
       <el-submenu index="3">
         <template slot="title"><span>综治管理</span></template>
         <el-menu-item-group>
-          <el-menu-item index="/system/mechanism">网格管理</el-menu-item>
+          <el-menu-item index="/comprehensive/girdManage">网格管理</el-menu-item>
           <el-menu-item index="/system/mechanism">任务管理</el-menu-item>
           <el-menu-item index="/system/mechanism">人员考核</el-menu-item>
           <el-menu-item index="/system/mechanism">信息报送</el-menu-item>

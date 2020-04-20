@@ -8,12 +8,14 @@ export default new Vuex.Store({
     userInfo: {}, // user登录的token
     loginUser: {}, // 当前登录用户的信息
     nation: [], // 民族字典
-    education: [] // 学历字典
+    education: [], // 学历字典
+    gridmanage: [] // 网格管理员
   },
   getters: {
     userInfo: state => state.userInfo,
     getLoginUser: state => state.loginUser,
     getEdu: state => state.education,
+    getgrids: state => state.gridmanage,
     getNation(state) {
       return state.nation
     }
@@ -22,6 +24,7 @@ export default new Vuex.Store({
     SETUSER: (state, user) => { state.userInfo = user },
     setNation: (state, nation) => {state.nation = nation},
     setEdu: (state, edu) => {state.education = edu},
+    setGrids: (state, grids) => {state.gridmanage = grids},
     setLogin (state, obj) {
       return state.loginUser = obj
     }
@@ -41,6 +44,9 @@ export default new Vuex.Store({
     },
     setEdus: ({commit}, edu) => {
       commit('setEdu', edu)
+    },
+    setGird: ({commit}, grids) => {
+      commit('setGrids', grids)
     }
   }
 })
