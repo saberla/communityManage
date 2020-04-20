@@ -247,6 +247,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               }
             })
+            .catch(err => {
+              this.loginUser.wrongPlace = '机构管理-新增街道办'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -281,6 +287,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               }
             })
+            .catch(err => {
+              this.loginUser.wrongPlace = '机构管理-修改信息'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -305,6 +317,12 @@ export default {
               this.getStreets()
               this.writeOpLog(this.loginUser)
             }
+          })
+          .catch(err => {
+            this.loginUser.wrongPlace = '机构管理-删除街道办'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
           })
       }).catch(() => {
         this.$message({

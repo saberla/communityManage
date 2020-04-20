@@ -207,7 +207,12 @@ export default {
             this.$emit('personTotal', this.paginationObj.total)
           }
         })
-        .catch(err => {console.log('saber发生错误:', err)})
+        .catch(err => {
+          this.loginUser.wrongPlace = '小区治理-获取人员建档信息'
+          this.loginUser.wrongInfo = String(err)
+          this.writeSysLog(this.loginUser)
+          console.log('发生错误', err)
+        })
     },
 
     // 人员建档
@@ -239,7 +244,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               }
             })
-            .catch(err => {console.log('错误', err)})
+            .catch(err => {
+              this.loginUser.wrongPlace = '小区治理-人员建档'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -274,7 +284,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               } 
             })
-            .catch(err => {console.log('错误：', err)})
+            .catch(err => {
+              this.loginUser.wrongPlace = '小区治理-修改人员信息'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -300,6 +315,12 @@ export default {
               this.getPerons()
               this.writeOpLog(this.loginUser)
             }
+          })
+          .catch(err => {
+            this.loginUser.wrongPlace = '小区治理-删除人员信息'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
           })
       }).catch(() => {
         this.$message({

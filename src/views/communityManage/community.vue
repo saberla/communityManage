@@ -208,6 +208,9 @@ export default {
               }
             })
             .catch(err => {
+              this.loginUser.wrongPlace = '小区治理-小区建档'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
               console.log('发生错误', err)
             })
         }
@@ -245,6 +248,9 @@ export default {
               }
             })
             .catch(err => {
+              this.loginUser.wrongPlace = '小区治理-编辑小区'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
               console.log('发生错误', err)
             })
         }
@@ -272,6 +278,12 @@ export default {
               this.writeOpLog(this.loginUser)
             }
           })
+          .catch(err => {
+            this.loginUser.wrongPlace = '小区治理-删除小区'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
+          })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -290,6 +302,12 @@ export default {
             this.loading = false
             this.tableData = res.data.com
           }
+        })
+        .catch(err => {
+          this.loginUser.wrongPlace = '小区治理-获取小区信息'
+          this.loginUser.wrongInfo = String(err)
+          this.writeSysLog(this.loginUser)
+          console.log('发生错误', err)
         })
     },
 

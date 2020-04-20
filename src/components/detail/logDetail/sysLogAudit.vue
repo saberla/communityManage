@@ -1,7 +1,7 @@
 <template>
 <!-- 操作日志 -->
-<div class="opLog">
-  <div class="opLogContainer">
+<div class="sysLog">
+  <div class="sysLogContainer">
     <!-- 表格 -->
     <div class="table_pzp">
       <div class="user_tableContent">
@@ -13,10 +13,9 @@
           style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
           <el-table-column prop="userName" label="账号" width="96"></el-table-column>
           <el-table-column prop="name" label="姓名" width="131"></el-table-column>
-          <el-table-column prop="tel" label="联系方式" width="131"></el-table-column>
-          <el-table-column prop="role" label="角色"  width="131"></el-table-column>
-          <el-table-column prop="operate" label="操作信息"  width="199"></el-table-column>
-          <el-table-column prop="date" label="操作时间"></el-table-column>
+          <el-table-column prop="wrongPlace" label="出错位置" width="171"></el-table-column>
+          <el-table-column prop="wrongInfo" label="出错信息" show-overflow-tooltip  width="377"></el-table-column>
+          <el-table-column prop="date" label="出错时间"></el-table-column>
         </el-table>
       </div>
     </div>
@@ -39,7 +38,7 @@ export default {
         pageSize: 6,
         handleCurrentChange: val => {
           this.paginationObj.currentPage = val
-          this.getLogRecords()
+          this.getSysRecords()
         }
       }
     }
@@ -48,18 +47,18 @@ export default {
     pagination
   },
   created() {
-    this.getLogRecords()
+    this.getSysRecords()
   },
   methods: {
-    // 获取操作日志
-    getLogRecords () {
+    // 获取系统日志
+    getSysRecords () {
       this.loading = true
       let params = {
         currentPage: this.paginationObj.currentPage,
         pageSize: this.paginationObj.pageSize
       }
       this.$axios
-        .post('/opRecords/getRecords', params)
+        .post('/sysRecords/getRecords', params)
         .then(res => {
           if(res.data.code === 200) {
             this.loading = false

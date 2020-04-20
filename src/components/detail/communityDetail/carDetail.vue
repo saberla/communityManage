@@ -165,7 +165,12 @@ export default {
             this.$emit('carTotal', this.paginationObj.total)
           }
         })
-        .catch(err => {console.log('saber发生错误:', err)})
+        .catch(err => {
+          this.loginUser.wrongPlace = '小区治理-获取车辆建档信息'
+          this.loginUser.wrongInfo = String(err)
+          this.writeSysLog(this.loginUser)
+          console.log('发生错误', err)
+        })
     },
 
     // 车辆建档
@@ -195,7 +200,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               }
             })
-            .catch(err => {console.log('错误', err)})
+            .catch(err => {
+              this.loginUser.wrongPlace = '小区治理-车辆建档'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -229,7 +239,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               } 
             })
-            .catch(err => {console.log('错误：', err)})
+            .catch(err => {
+              this.loginUser.wrongPlace = '小区治理-修改车辆信息'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -255,6 +270,12 @@ export default {
               this.getCars()
               this.writeOpLog(this.loginUser)
             }
+          })
+          .catch(err => {
+            this.loginUser.wrongPlace = '小区治理-删除车辆信息'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
           })
       }).catch(() => {
         this.$message({

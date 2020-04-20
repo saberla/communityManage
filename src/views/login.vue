@@ -60,6 +60,12 @@ export default {
                               console.log('写入记录成功')
                             }
                           })
+                          .catch(err => {
+                            decode.wrongPlace = '登录日志记录出错'
+                            decode.wrongInfo = String(err)
+                            this.writeSysLog(decode)
+                            console.log('发生错误', err)
+                          })
                         // token存到vuex
                         this.$store.dispatch('setUser', decode)
                         this.$router.push('/mainPage')

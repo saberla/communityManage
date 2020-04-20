@@ -351,9 +351,11 @@ export default {
               }
             })
             .catch(err => {
+              this.loginUser.wrongPlace = '用户管理-新增用户'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
               console.log('发生错误', err)
             })
-          // this.tableData.push(JSON.parse(JSON.stringify(this.user_dialogData)))
         } else {
           return this.$message.error('请按提示输入完整信息')
         }
@@ -393,6 +395,9 @@ export default {
               }
             })
             .catch(err => {
+              this.loginUser.wrongPlace = '用户管理-编辑用户'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
               console.log('发生错误', err)
             })
         }
@@ -422,7 +427,12 @@ export default {
               this.writeOpLog(this.loginUser)
             }
           })
-          .catch(err => {console.log('发生错误：',err)})
+          .catch(err => {
+            this.loginUser.wrongPlace = '用户管理-重置密码'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
+          })
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -462,6 +472,12 @@ export default {
             this.loading = false
           }
         })
+        .catch(res => {
+          this.loginUser.wrongPlace = '用户管理-获取用户信息'
+          this.loginUser.wrongInfo = String(err)
+          this.writeSysLog(this.loginUser)
+          console.log('发生错误', err)
+        })
     },
 
     // 删除用户
@@ -484,6 +500,12 @@ export default {
               this.getUsers()
               this.writeOpLog(this.loginUser)
             }
+          })
+          .catch(res => {
+            this.loginUser.wrongPlace = '用户管理-删除用户'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
           })
       }).catch(() => {
         this.$message({

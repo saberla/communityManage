@@ -203,6 +203,12 @@ export default {
                 })
             }
           })
+          .catch(err => {
+            this.loginUser.wrongPlace = '网格管理-新建网格'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
+          })
         }
       })
     },
@@ -329,6 +335,7 @@ export default {
                 for (let j in res.data.user[i].insideData) {
                   let newDate = new Date(res.data.user[i].insideData[j].date)
                   res.data.user[i].insideData[j].date = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate()
+                  res.data.user[i].insideData[j].gridPeople = res.data.user[i].name
                   this.tableData.push(res.data.user[i].insideData[j])
                 }
               }

@@ -271,6 +271,12 @@ export default {
             this.$store.dispatch('setGird', res.data.dic[2].insideData)
           }
         })
+        .catch(err => {
+          this.loginUser.wrongPlace = '字典维护-获取字典数据'
+          this.loginUser.wrongInfo = String(err)
+          this.writeSysLog(this.loginUser)
+          console.log('发生错误', err)
+        })
     },
     
     // 新增字典
@@ -295,6 +301,12 @@ export default {
                 this.addDialogVisible = false
                 this.writeOpLog(this.loginUser)
               }
+            })
+            .catch(err => {
+              this.loginUser.wrongPlace = '字典维护-新增字典'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
             })
         }
       })
@@ -323,6 +335,12 @@ export default {
                 this.addDetailVisible = false
                 this.writeOpLog(this.loginUser)
               }
+            })
+            .catch(err => {
+              this.loginUser.wrongPlace = '字典维护-新增字典明细'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
             })
         }
       })
@@ -354,6 +372,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               }
             })
+            .catch(err => {
+              this.loginUser.wrongPlace = '字典维护-修改字典数据'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -382,6 +406,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               }
             })
+            .catch(err => {
+              this.loginUser.wrongPlace = '字典维护-修改字典明细'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     },
@@ -406,6 +436,12 @@ export default {
               this.getDic()
               this.writeOpLog(this.loginUser)
             }
+          })
+          .catch(err => {
+            this.loginUser.wrongPlace = '字典维护-删除字典'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
           })
       }).catch(() => {
         this.$message({

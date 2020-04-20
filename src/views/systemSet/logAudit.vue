@@ -5,7 +5,7 @@
         <logAuditDetail></logAuditDetail>
       </el-tab-pane>
       <el-tab-pane label="系统日志" name="second">
-        <h1>系统日志</h1>
+        <sysLogAudit></sysLogAudit>
       </el-tab-pane>
       <el-tab-pane label="操作日志" name="third">
         <opLogAudit></opLogAudit>
@@ -17,15 +17,17 @@
 <script>
 import logAuditDetail from '@/components/detail/logDetail/logAuditDetail'
 import opLogAudit from '@/components/detail/logDetail/opLogAudit'
+import sysLogAudit from '@/components/detail/logDetail/sysLogAudit'
 export default {
   data() {
     return {
-      activeName: 'first',
+      activeName: 'first'
     }
   },
   components: {
     logAuditDetail,
-    opLogAudit
+    opLogAudit,
+    sysLogAudit
   }
 }
 

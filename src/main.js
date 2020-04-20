@@ -40,6 +40,7 @@ axios.defaults.baseURL = 'http://localhost:5000/api'
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(elementUI)
+
 // 全局记录操作日志方法
 Vue.prototype.writeOpLog = function(params) {
   this.$axios
@@ -47,6 +48,22 @@ Vue.prototype.writeOpLog = function(params) {
   .then(res => {
     if (res.data.code === 200) {
       console.log('记录成功')
+    }
+  })
+  .catch(err => {
+    params.wrongPlace = '记录操作日志出错'
+    params.wrongInfo = String(err)
+    this.writeSysLog(this.loginUser)
+    console.log('发生错误', err)
+  })
+}
+// 全局记录系统出错日志方法
+Vue.prototype.writeSysLog = function(params) {
+  this.$axios
+  .post('/sysRecords/writeRecords', params)
+  .then(res => {
+    if (res.data.code === 200) {
+      console.log('记录系统日志成功')
     }
   })
   .catch(err => {console.log('操作记录出错', err)})

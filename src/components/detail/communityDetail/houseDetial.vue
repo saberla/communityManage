@@ -203,7 +203,12 @@ export default {
             this.$emit('houseTotal', this.paginationObj.total)
           }
         })
-        .catch(err => {console.log('saber发生错误:', err)})
+        .catch(err => {
+          this.loginUser.wrongPlace = '小区治理-获取房屋建档信息'
+          this.loginUser.wrongInfo = String(err)
+          this.writeSysLog(this.loginUser)
+          console.log('发生错误', err)
+        })
     },
 
     // 房屋建档
@@ -234,6 +239,12 @@ export default {
               } else {
                 Message.error('与已有房屋信息重合')
               }
+            })
+            .catch (err => {
+              this.loginUser.wrongPlace = '小区治理-房屋建档'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
             })
         }
       })
@@ -266,7 +277,12 @@ export default {
                 this.writeOpLog(this.loginUser)
               } 
             })
-            .catch(err => {console.log('错误：', err)})
+            .catch(err => {
+              this.loginUser.wrongPlace = '小区治理-修改房屋信息'
+              this.loginUser.wrongInfo = String(err)
+              this.writeSysLog(this.loginUser)
+              console.log('发生错误', err)
+            })
         }
       })
     }
