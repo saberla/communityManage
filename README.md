@@ -3,6 +3,11 @@
 =======
 # community_manage
 
+## 技术栈
+```
+vue-cli3 + vue2 + vuex + vue-router + element-ui + ES6 + echarts
+```
+
 ## Project setup
 ```
 npm install
