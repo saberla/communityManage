@@ -198,10 +198,6 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             this.loading = false
-            res.data.person.forEach((el, index) => {
-              let newDate = new Date(el.date)
-              el.date = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate()
-            })
             this.tableData = res.data.person
             this.paginationObj.total = res.data.totalCount
             this.$emit('personTotal', this.paginationObj.total)
@@ -225,7 +221,12 @@ export default {
     },
     addPersonFinal (formName) {
       this.loginUser.operate = '小区治理-人员建档'
+      let nowDate = new Date()
+      let date1 = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate()
       let params = {
+        date: date1,
+        gridNum: this.loginUser.insideData[0].gridNum,
+        gridRange: this.loginUser.insideData[0].gridRange,
         communityName: this.mainPage.communityName,
         personAdd: this.add_dialogData.personAdd,
         personName: this.add_dialogData.personName,

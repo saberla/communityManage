@@ -564,18 +564,22 @@ export default {
     }
   }
 }
-.searchForm {
-  .el-form-item {
-    margin-left: 28px;
-    margin-top: 12px;
-    margin-bottom: 12px;
-  }
-  .el-input__inner {
-    width: 310px;
-    height: 32px;
-  }
-  .role .el-input__inner {
-    width: 180px;
+.userManage{
+  &_content{
+    .searchForm {
+      .el-form-item {
+        margin-left: 28px;
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+      .el-input__inner {
+        width: 310px;
+        height: 32px;
+      }
+      .role .el-input__inner {
+        width: 180px;
+      }
+    }
   }
 }
 </style>

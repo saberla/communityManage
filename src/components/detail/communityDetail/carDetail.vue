@@ -156,10 +156,6 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             this.loading = false
-            res.data.car.forEach((el, index) => {
-              let newDate = new Date(el.date)
-              el.date = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate()
-            })
             this.tableData = res.data.car
             this.paginationObj.total = res.data.totalCount
             this.$emit('carTotal', this.paginationObj.total)
@@ -182,7 +178,12 @@ export default {
     },
     addCarFinal (formName) {
       this.loginUser.operate = '小区治理-车辆建档'
+      let nowDate = new Date()
+      let date1 = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate()
       let params = {
+        date: date1,
+        gridNum: this.loginUser.insideData[0].gridNum,
+        gridRange: this.loginUser.insideData[0].gridRange,
         communityName: this.mainPage.communityName,
         carNum: this.add_dialogData.carNum,
         carHolder: this.add_dialogData.carHolder,

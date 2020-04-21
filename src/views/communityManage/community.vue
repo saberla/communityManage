@@ -4,7 +4,7 @@
       <p>小区建档</p>
     </div>
     <div class="community_content" v-if="!detailState">
-      <h2 style="diplay:inline-block;text-align:center">成都市新都区新都街道小区信息统计</h2>
+      <h2 style="diplay:inline-block;text-align:center">成都市新都区 {{loginUser.insideData[0].gridRange}}小区信息统计</h2>
       <div class="communityBtn" style="padding-left:24px;padding-top:12px">
         <el-button type="primary" @click="addCommunity()" size="mini">新增小区</el-button>
       </div>
@@ -190,6 +190,8 @@ export default {
     addCommunityFinal (formName) {
       this.loginUser.operate = '小区治理-小区建档'
       let params = {
+        gridNum: this.loginUser.insideData[0].gridNum,
+        gridRange: this.loginUser.insideData[0].gridRange,
         communityName: this.user_dialogData.communityName,
         communityAdd: this.user_dialogData.communityAdd,
         developCompany: this.user_dialogData.developCompany,
@@ -227,34 +229,42 @@ export default {
       this.modDialogVisible = true
     },
     modCommunity(formName) {
-      this.loginUser.operate = '小区治理-修改小区信息'
-      let params = {
-        communityName1: this.tempName,
-        communityName: this.mod_dialogData.communityName,
-        communityAdd: this.mod_dialogData.communityAdd,
-        developCompany: this.mod_dialogData.developCompany,
-        property: this.mod_dialogData.property
-      }
-      this.$refs[formName].validate(valid => {
-        if(valid) {
-          this.$axios
-            .post('/community/modCommunity', params)
-            .then(res => {
-              if(res.data.code === 200) {
-                this.getCommunity()
-                Message.success('修改成功')
-                this.modDialogVisible = false
-                this.writeOpLog(this.loginUser)
-              }
-            })
-            .catch(err => {
-              this.loginUser.wrongPlace = '小区治理-编辑小区'
-              this.loginUser.wrongInfo = String(err)
-              this.writeSysLog(this.loginUser)
-              console.log('发生错误', err)
-            })
+      try {
+        this.loginUser.operate = '小区治理-修改小区信息'
+        let params = {
+          gridNum: this.loginUser.insideData[0].gridNum,
+          communityName1: this.tempName,
+          communityName: this.mod_dialogData.communityName,
+          communityAdd: this.mod_dialogData.communityAdd,
+          developCompany: this.mod_dialogData.developCompany,
+          property: this.mod_dialogData.property
         }
-      })
+        this.$refs[formName].validate(valid => {
+          if(valid) {
+            this.$axios
+              .post('/community/modCommunity', params)
+              .then(res => {
+                if(res.data.code === 200) {
+                  this.getCommunity()
+                  Message.success('修改成功')
+                  this.modDialogVisible = false
+                  this.writeOpLog(this.loginUser)
+                }
+              })
+              .catch(err => {
+                this.loginUser.wrongPlace = '小区治理-编辑小区'
+                this.loginUser.wrongInfo = String(err)
+                this.writeSysLog(this.loginUser)
+                console.log('发生错误', err)
+              })
+          }
+        })
+      } catch (error) {
+        this.loginUser.wrongPlace = '小区治理-编辑小区信息'
+        this.loginUser.wrongInfo = String(error)
+        this.writeSysLog(this.loginUser)
+        console.log('发生错误', error)
+      }
     }, 
 
     // 删除小区
@@ -267,7 +277,7 @@ export default {
         dangerouslyUseHTMLString: true
       }).then(() => {
         this.$axios
-          .post('/community/deleCommunity', {communityName: row.communityName})
+          .post('/community/deleCommunity', {gridNum: this.loginUser.insideData[0].gridNum, communityName: row.communityName})
           .then(res => {
             if (res.data.code === 200) {
               this.$message({
@@ -292,23 +302,34 @@ export default {
       })
     },
 
-    // 获取小区信息
+    // 获取当前网格员管理的小区信息
     getCommunity () {
-      this.loading = true
-      this.$axios
-        .post('/community/getCommunities', {})
-        .then(res => {
-          if (res.data.code === 200) {
-            this.loading = false
-            this.tableData = res.data.com
-          }
-        })
-        .catch(err => {
-          this.loginUser.wrongPlace = '小区治理-获取小区信息'
-          this.loginUser.wrongInfo = String(err)
-          this.writeSysLog(this.loginUser)
-          console.log('发生错误', err)
-        })
+      try {
+        let params = {
+          gridNum: this.loginUser.insideData[0].gridNum,
+          gridRange: this.loginUser.insideData[0].gridRange
+        }
+        this.loading = true
+        this.$axios
+          .post('/community/getCommunities', params)
+          .then(res => {
+            if (res.data.code === 200) {
+              this.loading = false
+              this.tableData = res.data.com
+            }
+          })
+          .catch(err => {
+            this.loginUser.wrongPlace = '小区治理-获取小区信息'
+            this.loginUser.wrongInfo = String(err)
+            this.writeSysLog(this.loginUser)
+            console.log('发生错误', err)
+          })
+      } catch (error) {
+        this.loginUser.wrongPlace = '小区治理-获取小区信息'
+        this.loginUser.wrongInfo = String(error)
+        this.writeSysLog(this.loginUser)
+        console.log('发生错误', error)
+      }
     },
 
     // 打开小区详情页面

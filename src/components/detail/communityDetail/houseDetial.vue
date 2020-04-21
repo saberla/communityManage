@@ -194,10 +194,6 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             this.loading = false
-            res.data.house.forEach((el, index) => {
-              let newDate = new Date(el.date)
-              el.date = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate()
-            })
             this.tableData = res.data.house
             this.paginationObj.total = res.data.totalCount
             this.$emit('houseTotal', this.paginationObj.total)
@@ -220,7 +216,12 @@ export default {
     },
     addHouseFinal (formName) {
       this.loginUser.operate = '小区治理-房屋建档'
+      let nowDate = new Date()
+      let date1 = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate()
       let params = {
+        date: date1,
+        gridNum: this.loginUser.insideData[0].gridNum,
+        gridRange: this.loginUser.insideData[0].gridRange,
         communityName: this.mainPage.communityName,
         houseNum: this.add_dialogData.houseNum,
         houseSize: this.add_dialogData.houseSize + '平方米',

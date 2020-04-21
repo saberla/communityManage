@@ -49,8 +49,8 @@ export default {
   data() {
     return {
       defaultActive: '', // 当前激活的路由
-      gridState: false,
-      manageState: false
+      gridState: true,
+      manageState: true
     }
   },
   computed: {
@@ -60,30 +60,11 @@ export default {
       } else {
           return {}
       }
-    },
-    loginUser() {
-      return this.$store.getters.getLoginUser
     }
   },
   created() {
     this.getRouter()
-    this.getLoginUser()
-    // console.log(this.loginUser)
-    // 根据权限显示不同的页面
-    if (this.loginUser.role === 'administrator') {
-      console.log('管理员')
-      this.manageState = true
-    } else if (this.loginUser.role === '网格员用户') {
-      this.gridState = true
-      console.log('网格')
-    } else {
-      console.log(this.loginUser)
-      console.log('啥不是')
-      this.manageState = false
-      this.gridState = false
-    }
-  },
-  mounted() {
+    // this.getLoginUser()
     
   },
   methods: {
@@ -91,18 +72,27 @@ export default {
       this.defaultActive = this.$route.path
     },
     //获取登录用户信息
-    getLoginUser () {
-      let params = {
-          userName: this.userData.userName
-      }
-      this.$axios
-        .post('/user/getLoginUser', params)
-        .then(res => {
-            if(res.data.code === 200) {
-                this.$store.dispatch('setLoginUser', res.data.user[0])
-            }
-        })
-    }
+    // getLoginUser () {
+    //   console.log(this.userData)
+    //   let params = {
+    //       userName: this.userData.userName
+    //   }
+    //   this.$axios
+    //     .post('/user/getLoginUser', params)
+    //     .then(res => {
+    //         if(res.data.code === 200) {
+    //           // 根据权限显示不同的页面
+    //           // if (res.data.user[0].role === 'administrator') {
+    //           //   this.manageState = true
+    //           // } else if (res.data.user[0].role === '网格员用户') {
+    //           //   this.gridState = true
+    //           // } else {
+    //           //   this.manageState = false
+    //           //   this.gridState = false
+    //           // }
+    //         }
+    //     })
+    // }
   },
 }
 </script>

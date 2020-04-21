@@ -15,6 +15,17 @@ export default {
     }
     // 初始获取字典数据并存到vuex
     this.getDic()
+    // 获取当前登录用户信息存到vuex
+    this.getLoginUser()
+  },
+  computed: {
+    userData() {
+      if (this.$store.getters.userInfo) {
+          return this.$store.getters.userInfo
+      } else {
+          return {}
+      }
+    }
   },
   methods: {
     // 获取字典数据
@@ -29,6 +40,19 @@ export default {
           }
         })
     },
+    // 获取当前登录用户
+    getLoginUser () {
+      let params = {
+          userName: this.userData.userName
+      }
+      this.$axios
+        .post('/user/getLoginUser', params)
+        .then(res => {
+            if(res.data.code === 200) {
+              this.$store.dispatch('setLoginUser', res.data.user[0])
+            }
+        })
+      }
   },
 }
 </script>
