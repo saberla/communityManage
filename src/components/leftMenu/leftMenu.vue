@@ -13,7 +13,7 @@
           <el-menu-item index="/system/mechanism">领导大屏</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-submenu index="2">
+      <el-submenu index="2" v-if="gridState">
         <template slot="title"><span>小区治理</span></template>
         <el-menu-item-group>
           <el-menu-item index="/community/communityManage">小区建档</el-menu-item>
@@ -21,7 +21,7 @@
           <el-menu-item index="/community/infoSearch">信息统计</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-submenu index="3">
+      <el-submenu index="3" v-if="gridState">
         <template slot="title"><span>综治管理</span></template>
         <el-menu-item-group>
           <el-menu-item index="/comprehensive/girdManage">网格管理</el-menu-item>
@@ -30,7 +30,7 @@
           <el-menu-item index="/system/mechanism">信息报送</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-submenu index="4">
+      <el-submenu index="4" v-if="manageState">
         <template slot="title"><span>系统管理</span></template>
         <el-menu-item-group>
           <el-menu-item index="/system/userManage">用户管理</el-menu-item>
@@ -48,15 +48,60 @@
 export default {
   data() {
     return {
-      defaultActive: '' // 当前激活的路由
+      defaultActive: '', // 当前激活的路由
+      gridState: false,
+      manageState: false
+    }
+  },
+  computed: {
+    userData() {
+      if (this.$store.getters.userInfo) {
+          return this.$store.getters.userInfo
+      } else {
+          return {}
+      }
+    },
+    loginUser() {
+      return this.$store.getters.getLoginUser
     }
   },
   created() {
     this.getRouter()
+    this.getLoginUser()
+    // console.log(this.loginUser)
+    // 根据权限显示不同的页面
+    if (this.loginUser.role === 'administrator') {
+      console.log('管理员')
+      this.manageState = true
+    } else if (this.loginUser.role === '网格员用户') {
+      this.gridState = true
+      console.log('网格')
+    } else {
+      console.log(this.loginUser)
+      console.log('啥不是')
+      this.manageState = false
+      this.gridState = false
+    }
+  },
+  mounted() {
+    
   },
   methods: {
     getRouter () {
       this.defaultActive = this.$route.path
+    },
+    //获取登录用户信息
+    getLoginUser () {
+      let params = {
+          userName: this.userData.userName
+      }
+      this.$axios
+        .post('/user/getLoginUser', params)
+        .then(res => {
+            if(res.data.code === 200) {
+                this.$store.dispatch('setLoginUser', res.data.user[0])
+            }
+        })
     }
   },
 }
