@@ -14,7 +14,7 @@ const routes = [
     path: '/mainPage',
     name: 'mainPage',
     component: () => import('../components/layout/layout.vue'),
-    redirect: '/system/userManage',  //初始化跳转页
+    redirect: '/information/girdPort',  //初始化跳转页
     children: [
       // 系统设置
       {
@@ -57,11 +57,27 @@ const routes = [
 
       // 综治管理
       {
-        path: '/comprehensive/girdManage',
+        path: '/comprehensive/girdManage', // 网格管理
         name: 'gridManage',
         component: () => import('../views/comprehensive/gridManage.vue')
-      }
+      },
       
+      //信息门户
+      {
+        path: '/information/girdPort', // 网格门户
+        name: 'girdPort',
+        component: () => import('../views/informationPortal/gridPort.vue')
+      },
+      {
+        path: '/information/searchPort',  // 查询门户
+        name: 'searchPort',
+        component: () => import('../views/informationPortal/searchPort.vue')
+      },
+      {
+        path: '/information/leaderPort',  // 领导大屏
+        name: 'leaderPort',
+        component: () => import('../views/informationPortal/leaderPort.vue')
+      }
       
       
     ]

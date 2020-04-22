@@ -1,6 +1,6 @@
 <template>
-  <div class="carSearch">
-    <div class="carSearch_header">
+  <div class="carInfo">
+    <div class="carInfo_header">
       <div class="searchForm" style="overflow: auto">
         <el-form :inline="true" :model="formData" ref="searchForm">
           <el-form-item label="车牌号" prop="carNum" class="firSearch">
@@ -26,12 +26,13 @@
         </div>
       </div>
     </div>
-    <div class="carSearch_content">
+    <div class="carInfo_content">
       <el-button type="primary" size="small" style="margin-left:24px" @click="exportMeth">数据导出</el-button>
       <!-- 表格 -->
       <div class="table_pzp">
         <div class="user_tableContent">
           <el-table
+            max-height="325"
             :row-key="getRowKeys"
             @selection-change="handleSelectionChange"
             v-loading="loading"
@@ -48,7 +49,6 @@
           </el-table>
         </div>
       </div>
-      <pagination :paginationObj='paginationObj'></pagination>
     </div>
 
     <!-- 导出的表格 -->
@@ -71,7 +71,6 @@
 </template>
 
 <script>
-import pagination from '../../pagination/pagination'
 import FileSaver from 'file-saver'
 import XLSX from 'xlsx'
 import { Message } from 'element-ui'
@@ -87,17 +86,7 @@ export default {
       },
       loading: false,
       tableData: [],
-      tableData1: [],
-      //分页
-      paginationObj: {
-        total: 0,
-        currentPage: 1,
-        pageSize: 3,
-        handleCurrentChange: (val) => {
-          this.paginationObj.currentPage = val
-          this.getCars()
-        }
-      }
+      tableData1: []
     }
   },
   computed: {
@@ -107,9 +96,6 @@ export default {
   },
   created() {
     this.getCars()
-  },
-  components: {
-    pagination
   },
   methods: {
     getRowKeys(row) {
@@ -143,12 +129,7 @@ export default {
     // 查询并获取当前辖区的车辆
     getCars () {
       let query1 = {}
-      query1.gridNum = this.loginUser.insideData[0].gridNum
-      query1.gridRange = this.loginUser.insideData[0].gridRange
-      if (this.formData.carNum === '' && this.formData.carHolder === '' && this.formData.communityName === '' && this.formData.date === '') {
-        query1.gridNum = this.loginUser.insideData[0].gridNum
-        query1.gridRange = this.loginUser.insideData[0].gridRange
-      }
+      if (this.formData.carNum === '' && this.formData.carHolder === '' && this.formData.communityName === '' && this.formData.date === '') query1 = {}
       if (this.formData.carNum !== '') {query1.carNum = this.formData.carNum}
       if (this.formData.carHolder !== '') {query1.carHolder = this.formData.carHolder}
       if (this.formData.communityName !== '') {query1.communityName = this.formData.communityName}
@@ -157,22 +138,19 @@ export default {
         query1.date = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate()
       }
       let params = {
-        currentPage: this.paginationObj.currentPage,
-        pageSize: this.paginationObj.pageSize,
         query: query1
       }
       this.loading = true
       this.$axios
-        .post('/cars/getSearchCars', params)
+        .post('/cars/getInfoCars', params)
         .then(res => {
           if (res.data.code === 200) {
             this.tableData = res.data.cars
-            this.paginationObj.total = res.data.totalCount
             this.loading = false
           }
         })
         .catch(res => {
-          this.loginUser.wrongPlace = '用户管理-获取用户信息'
+          this.loginUser.wrongPlace = '查询门户-车辆信息查询'
           this.loginUser.wrongInfo = String(err)
           this.writeSysLog(this.loginUser)
           console.log('发生错误', err)
@@ -195,18 +173,13 @@ export default {
 </style>
 
 <style lang="scss">
-.carSearch{
+.carInfo{
   &_header{
     .searchForm {
-      .el-form-item {
-        margin-left: 40px;
-        margin-top: 12px;
-        margin-bottom: 12px;
+      .el-input__inner {
+        width: 188px;
+        height: 32px;
       }
-    }
-    .el-input__inner {
-      width: 188px;
-      height: 32px;
     }
     .firSearch{
       .el-input__inner {

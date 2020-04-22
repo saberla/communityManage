@@ -4,6 +4,7 @@
       <div class="personImg">
         <img src="../../assets/用户.png" class="portrait" alt="personImg">
         <p class="userInfo">账号：<span class="rightInfo">{{userData.userName}}</span></p>
+        <p class="userInfo">角色：<span class="rightInfo">{{loginUser.role}}</span></p>
         <p class="userInfo">
           姓名：<span class="rightInfo">{{loginUser.name}}</span>
           <img src="../../assets/write.png" class="rightImg" @click="updateName" alt="writeImg">

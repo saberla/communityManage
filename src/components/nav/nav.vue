@@ -7,9 +7,9 @@
           <div class="headImg">
               <img src="../../assets/no_user.png" alt="head_logo" height="70%">
           </div>
-          <el-dropdown @command="handleCommand" class="drop" trigger="click" placement='bottom-start'>
+          <el-dropdown @command="handleCommand" class="drop" trigger="click" placement='bottom-end'>
                 <span class="el-dropdown-link">
-                    {{loginUser.name}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    {{loginUser.role}}-{{loginUser.name}}<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="b">编辑资料</el-dropdown-item>
@@ -81,7 +81,7 @@ export default {
         margin-left: 25px;
     }
     .rightNav{
-        width: 161px;
+        width: 201px;
         height: 100%;
         padding-right: 40px;
         display: flex;

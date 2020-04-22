@@ -138,7 +138,6 @@ export default {
     },
     handleSelectionChange(val) {
       this.tableData1 = val
-      console.log(this.tableData1)
     },
     // 表单重置
     resetForm (formName) {
@@ -202,6 +201,17 @@ export default {
 <style lang="scss">
 .personSearch{
   &_header{
+    .searchForm {
+      .el-form-item {
+        margin-left: 40px;
+        margin-top: 12px;
+        margin-bottom: 12px;
+      }
+      .el-input__inner {
+        width: 199px;
+        height: 32px;
+      }
+    }
     .firSearch{
       .el-input__inner {
         width: 99px;

@@ -8,9 +8,9 @@
       <el-submenu index="1">
         <template slot="title"><span>信息门户</span></template>
         <el-menu-item-group>
-          <el-menu-item index="/system/mechanism">网格门户</el-menu-item>
-          <el-menu-item index="/system/mechanism">查询门户</el-menu-item>
-          <el-menu-item index="/system/mechanism">领导大屏</el-menu-item>
+          <el-menu-item index="/information/girdPort">网格门户</el-menu-item>
+          <el-menu-item index="/information/searchPort">查询门户</el-menu-item>
+          <el-menu-item index="/information/leaderPort">领导大屏</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2" v-if="gridState">
