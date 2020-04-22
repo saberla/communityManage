@@ -24,17 +24,19 @@
       </div>
     </div>
     <div class="houseSearch_content">
-      <el-button type="primary" size="small" style="margin-left:24px">数据导出</el-button>
+      <el-button type="primary" size="small" style="margin-left:24px" @click="exportMeth">数据导出</el-button>
       <!-- 表格 -->
       <div class="table_pzp">
         <div class="user_tableContent">
           <el-table
             v-loading="loading"
+            :row-key="getRowKeys"
+            @selection-change="handleSelectionChange"
             ref="multipleTable"
             :data="tableData"
             :header-cell-style="{'background-color':'rgba(232, 232, 232, 1)','color':'rgba(90, 90, 90, 1)'}"
             style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
-            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
             <el-table-column prop="houseNum" label="门牌号" width="177"></el-table-column>
             <el-table-column prop="houseSize" label="房屋面积" width="177"></el-table-column>
             <el-table-column prop="houseHolder" label="户主" width="177"></el-table-column>
@@ -45,16 +47,37 @@
       </div>
       <pagination :paginationObj='paginationObj'></pagination>
     </div>
+
+    <!-- 导出的表格 -->
+    <el-table
+      v-show="false"
+      id='housetable'
+      ref="multipleTable"
+      :data="tableData1"
+      :header-cell-style="{'background-color':'rgba(232, 232, 232, 1)','color':'rgba(90, 90, 90, 1)'}"
+      style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
+      <el-table-column prop="gridNum" label="网格编号" width="177"></el-table-column>
+      <el-table-column prop="gridRange" label="网格区域" width="177"></el-table-column>
+      <el-table-column prop="houseNum" label="门牌号" width="177"></el-table-column>
+      <el-table-column prop="houseSize" label="房屋大小" width="177"></el-table-column>
+      <el-table-column prop="houseHolder" label="户主" width="177"></el-table-column>
+      <el-table-column prop="communityName" label="所属小区" width="199"></el-table-column>
+      <el-table-column prop="date" label="建档日期"></el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
 import pagination from '../../pagination/pagination'
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
+import { Message } from 'element-ui'
 export default {
   data() {
     return {
       loading: false,
       tableData: [],
+      tableData1: [],
       formData: {
         houseHolder: '',
         communityName: '',
@@ -84,6 +107,29 @@ export default {
     }
   },
   methods: {
+    getRowKeys(row) {
+      return row._id
+    },
+    // 导出选中的表格
+    exportMeth() {
+      if (this.tableData1.length !== 0) {
+        let wb = XLSX.utils.table_to_book(document.querySelector('#housetable'));   // 这里就是表格
+        let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+        try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '房屋建档信息.xlsx');  //table是自己导出文件时的命名，随意
+        } catch (e) {
+          console.log(e, wbout)
+        }
+        this.loginUser.operate = '小区治理-房屋数据导出'
+        this.writeOpLog(this.loginUser)
+        return wbout
+      } else {
+        Message.error('请选择需要导出的数据')
+      }
+    },
+    handleSelectionChange(val) {
+      this.tableData1 = val
+    },
     // 表单重置
     resetForm (formName) {
       this.$refs[formName].resetFields()
