@@ -22,8 +22,8 @@
           <el-button type="primary" size="mini" @click="getUsers()">查询</el-button>
         </div>
       </div>
-
       <el-button type="primary" size="small" style="margin-left:24px" @click="exportMeth">数据导出</el-button>
+      <el-button type="primary" size="small" v-if="returnState" @click="returnMain">返回</el-button>
       <!-- 表格 -->
       <div class="table_pzp">
         <div class="user_tableContent">
@@ -75,6 +75,7 @@ import { Message } from 'element-ui'
 export default {
   data() {
     return {
+      returnState: false,
       // 表格数据
       tableData: [],
       loading: false,
@@ -98,9 +99,18 @@ export default {
     }
   },
   created() {
+    if (this.$route.path === '/information/leaderPort') {
+      this.returnState = true
+    }
     this.getUsers()
   },
   methods: {
+    returnMain() {
+      this.$router.push('/information/searchPort')
+      setTimeout(() => {
+        this.$router.push('/information/leaderPort')
+      }, 10);
+    },
     getRowKeys(row) {
       return row._id
     },

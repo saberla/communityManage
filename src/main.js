@@ -7,6 +7,7 @@ import elementUI, { Message } from 'element-ui'
 import axios from 'axios'
 import './registerServiceWorker'
 import './element-variables.scss'
+import echart from 'echarts'
 
 // axios请求拦截器
 axios.interceptors.request.use(config => {
@@ -18,7 +19,6 @@ axios.interceptors.request.use(config => {
 }, error => {
   return Promise.reject(error)
 })
-
 // axios响应拦截器
 axios.interceptors.response.use(response => {
   return response.data
@@ -38,6 +38,7 @@ axios.interceptors.response.use(response => {
 axios.defaults.baseURL = 'http://localhost:5000/api'
 
 Vue.prototype.$axios = axios
+Vue.prototype.$echarts = echart
 Vue.config.productionTip = false
 Vue.use(elementUI)
 
