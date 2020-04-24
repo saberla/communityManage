@@ -61,6 +61,17 @@ const routes = [
         name: 'gridManage',
         component: () => import('../views/comprehensive/gridManage.vue')
       },
+      {
+        path: '/comprehensive/taskManage', // 任务管理
+        name: 'taskManage',
+        component: () => import('../views/comprehensive/taskManage.vue')
+      },
+      {
+        path: '/comprehensive/personAssessment', // 任务管理
+        name: 'personAssessment',
+        component: () => import('../views/comprehensive/personAssessment.vue')
+      },
+
       
       //信息门户
       {
