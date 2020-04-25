@@ -188,10 +188,17 @@ export default {
       this.addDialogVisible = true
     },
     addCommunityFinal (formName) {
+      for (let i in this.loginUser.insideData) {
+        if (this.loginUser.insideData[i].gridNum) {
+          var gridNum1 = this.loginUser.insideData[i].gridNum
+          var gridRange1 = this.loginUser.insideData[i].gridRange
+          break
+        }
+      }
       this.loginUser.operate = '小区治理-小区建档'
       let params = {
-        gridNum: this.loginUser.insideData[0].gridNum,
-        gridRange: this.loginUser.insideData[0].gridRange,
+        gridNum: gridNum1,
+        gridRange: gridRange1,
         communityName: this.user_dialogData.communityName,
         communityAdd: this.user_dialogData.communityAdd,
         developCompany: this.user_dialogData.developCompany,
@@ -230,9 +237,16 @@ export default {
     },
     modCommunity(formName) {
       try {
+        for (let i in this.loginUser.insideData) {
+          if (this.loginUser.insideData[i].gridNum) {
+            var gridNum1 = this.loginUser.insideData[i].gridNum
+            var gridRange1 = this.loginUser.insideData[i].gridRange
+            break
+          }
+        }
         this.loginUser.operate = '小区治理-修改小区信息'
         let params = {
-          gridNum: this.loginUser.insideData[0].gridNum,
+          gridNum: gridNum1,
           communityName1: this.tempName,
           communityName: this.mod_dialogData.communityName,
           communityAdd: this.mod_dialogData.communityAdd,
@@ -276,8 +290,15 @@ export default {
         customClass: 'delete_icon',
         dangerouslyUseHTMLString: true
       }).then(() => {
+        for (let i in this.loginUser.insideData) {
+          if (this.loginUser.insideData[i].gridNum) {
+            var gridNum1 = this.loginUser.insideData[i].gridNum
+            var gridRange1 = this.loginUser.insideData[i].gridRange
+            break
+          }
+        }
         this.$axios
-          .post('/community/deleCommunity', {gridNum: this.loginUser.insideData[0].gridNum, communityName: row.communityName})
+          .post('/community/deleCommunity', {gridNum: gridNum1, communityName: row.communityName})
           .then(res => {
             if (res.data.code === 200) {
               this.$message({
@@ -305,9 +326,16 @@ export default {
     // 获取当前网格员管理的小区信息
     getCommunity () {
       try {
+        for (let i in this.loginUser.insideData) {
+          if (this.loginUser.insideData[i].gridNum) {
+            var gridNum1 = this.loginUser.insideData[i].gridNum
+            var gridRange1 = this.loginUser.insideData[i].gridRange
+            break
+          }
+        }
         let params = {
-          gridNum: this.loginUser.insideData[0].gridNum,
-          gridRange: this.loginUser.insideData[0].gridRange
+          gridNum: gridNum1,
+          gridRange: gridRange1
         }
         this.loading = true
         this.$axios

@@ -146,12 +146,19 @@ export default {
     },
     // 查询并获取当前辖区的车辆
     getPersons () {
+      for (let i in this.loginUser.insideData) {
+        if (this.loginUser.insideData[i].gridNum) {
+          var gridNum1 = this.loginUser.insideData[i].gridNum
+          var gridRange1 = this.loginUser.insideData[i].gridRange
+          break
+        }
+      }
       let query1 = {}
-      query1.gridNum = this.loginUser.insideData[0].gridNum
-      query1.gridRange = this.loginUser.insideData[0].gridRange
+      query1.gridNum = gridNum1
+      query1.gridRange = gridRange1
       if (this.formData.personName === '' && this.formData.personSex === '' && this.formData.communityName === '' && this.formData.date === '') {
-        query1.gridNum = this.loginUser.insideData[0].gridNum
-        query1.gridRange = this.loginUser.insideData[0].gridRange
+        query1.gridNum = gridNum1
+        query1.gridRange = gridRange1
       }
       if (this.formData.personName !== '') {query1.personName = this.formData.personName}
       if (this.formData.communityName !== '') {query1.communityName = this.formData.communityName}

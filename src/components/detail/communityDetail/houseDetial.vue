@@ -215,13 +215,20 @@ export default {
       this.addDialogVisible = true
     },
     addHouseFinal (formName) {
+      for (let i in this.loginUser.insideData) {
+        if (this.loginUser.insideData[i].gridNum) {
+          var gridNum1 = this.loginUser.insideData[i].gridNum
+          var gridRange1 = this.loginUser.insideData[i].gridRange
+          break
+        }
+      }
       this.loginUser.operate = '小区治理-房屋建档'
       let nowDate = new Date()
       let date1 = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate()
       let params = {
         date: date1,
-        gridNum: this.loginUser.insideData[0].gridNum,
-        gridRange: this.loginUser.insideData[0].gridRange,
+        gridNum: gridNum1,
+        gridRange: gridRange1,
         communityName: this.mainPage.communityName,
         houseNum: this.add_dialogData.houseNum,
         houseSize: this.add_dialogData.houseSize + '平方米',
