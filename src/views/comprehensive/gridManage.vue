@@ -225,8 +225,8 @@ export default {
     modGridFinal(formName) {
       this.loginUser.operate = '网格管理-修改网格信息'
       let params1 = {
-          gridNum: this.mod_dialogData.gridNum
-        }
+        gridNum: this.mod_dialogData.gridNum
+      }
         let params2 = {
           currentPage: 1,
           pageSize: 1000,
@@ -335,8 +335,10 @@ export default {
                 for (let j in res.data.user[i].insideData) {
                   let newDate = new Date(res.data.user[i].insideData[j].date)
                   res.data.user[i].insideData[j].date = newDate.getFullYear() + '-' + (newDate.getMonth() + 1) + '-' + newDate.getDate()
-                  res.data.user[i].insideData[j].gridPeople = res.data.user[i].name
-                  this.tableData.push(res.data.user[i].insideData[j])
+                  if (res.data.user[i].insideData[j].gridNum) {
+                    res.data.user[i].insideData[j].gridPeople = res.data.user[i].name
+                    this.tableData.push(res.data.user[i].insideData[j])
+                  }
                 }
               }
             }

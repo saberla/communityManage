@@ -42,7 +42,7 @@
           <el-button type="primary" size="mini" @click="getTasks()">查询</el-button>
         </div>
       </div>
-      <el-button type="primary" size="small" style="margin-left:24px" @click="addTask">新建任务</el-button>
+      <el-button type="primary" size="small" style="margin-left:24px" v-if="loginUser.userName === 'manage'" @click="addTask">新建任务</el-button>
 
       <!-- 表格 -->
       <div class="table_pzp">
@@ -557,7 +557,7 @@ export default {
         })
     },
 
-    // 删除用户
+    // 删除任务
     delMeth (row) {
       this.loginUser.operate = '任务管理-删除任务'
       this.$confirm('删除后不可恢复，确定要删除吗？', '删除', {
