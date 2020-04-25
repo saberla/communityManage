@@ -18,7 +18,6 @@
         <el-menu-item-group>
           <el-menu-item index="/community/communityManage">小区建档</el-menu-item>
           <el-menu-item index="/community/infoSearch">信息查询</el-menu-item>
-          <el-menu-item index="/community/infoSearch">信息统计</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="3" v-if="gridState">

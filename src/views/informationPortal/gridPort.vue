@@ -1,23 +1,33 @@
 <template>
   <div class="gridPort">
     <div class="gridPort_header" style="text-align:center">
-      <h2 class="header">新都区网格门户</h2>
+      <h2 class="header">新都区网格门户-{{role}}</h2>
       <p>
         <span class="totalWord">小区总数:<span class="totalCount">{{totalObj.communityTotal}}</span></span>
         <span class="totalWord">房屋总数:<span class="totalCount">{{totalObj.houseTotal}}</span></span>
         <span class="totalWord">人员总数:<span class="totalCount">{{totalObj.personTotal}}</span></span>
         <span class="totalWord">车辆总数:<span class="totalCount">{{totalObj.carTotal}}</span></span>
-        <span class="totalWord">管理员总数:<span class="totalCount">{{totalObj.userTotal}}</span></span>
       </p>
     </div>
-    <div id="gridPort_content">
-      <div id="gridPort_main" style="width:100%;height: 470px" v-if="mainState"></div>
-      <communityInfo v-if="communityState"></communityInfo>
-      <houseInfo v-if="houseState"></houseInfo>
-      <carInfo v-if="carState"></carInfo>
-      <personInfo v-if="personState"></personInfo>
-      <userInfoSearch v-if="userState"></userInfoSearch>
-    </div>
+    <div class="gridPort_content">
+      <div id="gridPort_main" style="width:700px;height: 470px" v-if="mainState"></div>
+        <communityInfo v-if="communityState"></communityInfo>
+        <houseInfo v-if="houseState"></houseInfo>
+        <carInfo v-if="carState"></carInfo>
+        <personInfo v-if="personState"></personInfo>
+        <userInfoSearch v-if="userState"></userInfoSearch>
+      </div>
+      <div class="gridNotice" style="width:400px;height: 600px">
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>系统通知</span>
+            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+          </div>
+          <div v-for="o in 4" :key="o" style="margin-top:10px">
+            {{'列表内容 ' + o }}
+          </div>
+        </el-card>
+      </div>
   </div>
 </template>
 
@@ -36,12 +46,12 @@ export default {
       personState: false,
       userState: false,
       communityState: false,
+      role: '',
       totalObj:{
         communityTotal: '',
         houseTotal: '',
         carTotal: '',
-        personTotal: '',
-        userTotal: ''
+        personTotal: ''
       },
       echartsData: [],
     }
@@ -55,26 +65,38 @@ export default {
   },
   created() {
     this.getInfos()
+    for (let i in this.loginUser.insideData) {
+      if (this.loginUser.insideData[i].gridNum) {
+        this.role = this.loginUser.insideData[i].gridRange
+        break
+      }
+    }
   },
   mounted() {
     this.initData()
+  },
+  computed: {
+    loginUser() {
+      return this.$store.getters.getLoginUser
+    }
   },
   methods: {
     // 获取初始数据并赋值
     // 获取管理员信息
     async getInfos () {
-      let params = {}
-      await this.$axios
-        .post('/user/getUsers', params)
-        .then(res => {
-          if (res.data.code === 200) {
-            res.data.user.forEach((el, index) => {
-              let nowDate = new Date(el.date)
-              el.date = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate()
-            })
-            this.totalObj.userTotal = res.data.totalCount
-          }
-        })
+      for (let i in this.loginUser.insideData) {
+        if (this.loginUser.insideData[i].gridNum) {
+          var gridNum1 = this.loginUser.insideData[i].gridNum
+          var gridRange1 = this.loginUser.insideData[i].gridRange
+          break
+        }
+      }
+      let query1 = {}
+      query1.gridRange = gridRange1
+      query1.gridNum = gridNum1
+      let params = {
+        query: query1
+      }
       // 获取小区人员信息
       await this.$axios
         .post('/persons/getInfoPersons', params)
@@ -116,7 +138,7 @@ export default {
       // 绘制图表
       myChart.setOption({
           title : {
-              text: '新都街道综治中心',//主标题
+              text: '工作统计',//主标题
               x:'center',//x轴方向对齐方式
           },
           tooltip : {
@@ -213,6 +235,11 @@ export default {
       // color: rgba(44, 136, 212, 0.7);
       font-weight: bolder;
     }
+  }
+  .gridNotice {
+    position: fixed;
+    right: 100px;
+    top: 240px
   }
 } 
 </style>
