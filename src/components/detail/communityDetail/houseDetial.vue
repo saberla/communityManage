@@ -1,7 +1,7 @@
 <template>
   <div class="house">
     <div class="addHouse">
-      <el-button type="primary" size="mini" style="margin-left:24px" @click="addHouse">房屋建档</el-button>
+      <el-button type="primary" size="mini" style="margin-left:24px" @click="addHouse" v-if="loginUser.role !== 'gridManager'">房屋建档</el-button>
     </div>
     <!-- 表格 -->
     <div class="table_pzp">

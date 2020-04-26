@@ -4,9 +4,9 @@
       <p>小区建档</p>
     </div>
     <div class="community_content" v-if="!detailState">
-      <h2 style="diplay:inline-block;text-align:center">成都市新都区 {{loginUser.insideData[0].gridRange}}小区信息统计</h2>
+      <h2 style="diplay:inline-block;text-align:center">成都市新都区 小区信息统计</h2>
       <div class="communityBtn" style="padding-left:24px;padding-top:12px">
-        <el-button type="primary" @click="addCommunity()" size="mini">新增小区</el-button>
+        <el-button type="primary" @click="addCommunity()" size="mini" v-if="loginUser.role !== 'gridManager'">新增小区</el-button>
       </div>
       <div class="table_pzp">
         <el-table
@@ -22,13 +22,13 @@
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <div>
-                <el-button class="short_btn" size="mini" type="primary" @click="editMeth(scope.row)">
+                <el-button class="short_btn" size="mini" type="primary" v-if="loginUser.role !== 'gridManager'" @click="editMeth(scope.row)">
                   编辑
                 </el-button
-                ><el-button class="long_btn" size="mini" @click="openDetail(scope.row)">
+                ><el-button class="long_btn" size="mini"  @click="openDetail(scope.row)">
                   详情
                 </el-button
-                ><el-button class="short_btn" size="mini"  @click="delMeth(scope.row)">
+                ><el-button class="short_btn" size="mini" v-if="loginUser.role !== 'gridManager'"  @click="delMeth(scope.row)">
                   删除
                 </el-button>
               </div>
@@ -326,20 +326,27 @@ export default {
     // 获取当前网格员管理的小区信息
     getCommunity () {
       try {
-        for (let i in this.loginUser.insideData) {
-          if (this.loginUser.insideData[i].gridNum) {
-            var gridNum1 = this.loginUser.insideData[i].gridNum
-            var gridRange1 = this.loginUser.insideData[i].gridRange
-            break
+        if (this.loginUser.role === 'gridManager') {
+          var params = {}
+        } else {
+          for (let i in this.loginUser.insideData) {
+            if (this.loginUser.insideData[i].gridNum) {
+              var gridNum1 = this.loginUser.insideData[i].gridNum
+              var gridRange1 = this.loginUser.insideData[i].gridRange
+              break
+            }
+          }
+          var params = {
+            gridNum: gridNum1,
+            gridRange: gridRange1
           }
         }
-        let params = {
-          gridNum: gridNum1,
-          gridRange: gridRange1
+        let params1 = {
+          query: params
         }
         this.loading = true
         this.$axios
-          .post('/community/getCommunities', params)
+          .post('/community/getCommunities', params1)
           .then(res => {
             if (res.data.code === 200) {
               this.loading = false

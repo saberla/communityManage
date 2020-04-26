@@ -2,7 +2,7 @@
   <div class="carSearch">
     <div class="carSearch_header">
       <div class="searchForm" style="overflow: auto">
-        <el-form :inline="true" :model="formData" ref="searchForm">
+        <el-form :inline="true" :model="formData" style="overflow: auto" ref="searchForm">
           <el-form-item label="车牌号" prop="carNum" class="firSearch">
             <el-input v-model="formData.carNum"></el-input>
           </el-form-item
@@ -28,6 +28,7 @@
     </div>
     <div class="carSearch_content">
       <el-button type="primary" size="small" style="margin-left:24px" @click="exportMeth">数据导出</el-button>
+      <el-button type="primary" size="small" v-if="returnState" @click="returnMain">返回</el-button>
       <!-- 表格 -->
       <div class="table_pzp">
         <div class="user_tableContent">
@@ -79,6 +80,7 @@ import { Message } from 'element-ui'
 export default {
   data () {
     return {
+      returnState: false,
       formData: {
         carNum: '',
         carHolder: '',
@@ -106,12 +108,21 @@ export default {
     }
   },
   created() {
+    if (this.$route.path === '/information/girdPort') {
+      this.returnState = true
+    }
     this.getCars()
   },
   components: {
     pagination
   },
   methods: {
+    returnMain() {
+      this.$router.push('/information/searchPort')
+      setTimeout(() => {
+        this.$router.push('/information/girdPort')
+      }, 50);
+    },
     getRowKeys(row) {
       return row._id
     },
@@ -206,7 +217,7 @@ export default {
   &_header{
     .searchForm {
       .el-form-item {
-        margin-left: 40px;
+        margin-left: 29px;
         margin-top: 12px;
         margin-bottom: 12px;
       }
@@ -224,6 +235,12 @@ export default {
     .secSearch{
       .el-input__inner {
         width: 99px;
+        height: 32px;
+      }
+    }
+    .date{
+      .el-input__inner {
+        width: 141px;
         height: 32px;
       }
     }

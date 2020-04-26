@@ -102,7 +102,7 @@ export default {
       this.$router.push('/information/searchPort')
       setTimeout(() => {
         this.$router.push('/information/leaderPort')
-      }, 10);
+      }, 50);
     },
     getRowKeys(row) {
       return row._id

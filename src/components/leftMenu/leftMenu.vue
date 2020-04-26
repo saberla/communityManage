@@ -8,9 +8,9 @@
       <el-submenu index="1">
         <template slot="title"><span>信息门户</span></template>
         <el-menu-item-group>
-          <el-menu-item index="/information/girdPort">网格门户</el-menu-item>
-          <el-menu-item index="/information/searchPort">查询门户</el-menu-item>
-          <el-menu-item index="/information/leaderPort">领导大屏</el-menu-item>
+          <el-menu-item index="/information/girdPort" v-if="gridState">网格门户</el-menu-item>
+          <el-menu-item index="/information/searchPort" v-if="searchState">查询门户</el-menu-item>
+          <el-menu-item index="/information/leaderPort" v-if="leaderState">领导大屏</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2" v-if="gridState">
@@ -23,7 +23,7 @@
       <el-submenu index="3" v-if="gridState">
         <template slot="title"><span>综治管理</span></template>
         <el-menu-item-group>
-          <el-menu-item index="/comprehensive/girdManage">网格管理</el-menu-item>
+          <el-menu-item index="/comprehensive/girdManage" v-if="gridDetailState">网格管理</el-menu-item>
           <el-menu-item index="/comprehensive/taskManage">任务管理</el-menu-item>
           <el-menu-item index="/comprehensive/personAssessment">人员考核</el-menu-item>
         </el-menu-item-group>
@@ -46,9 +46,12 @@
 export default {
   data() {
     return {
-      defaultActive: '', // 当前激活的路由
-      gridState: true,
-      manageState: true
+      // defaultActive: '', // 当前激活的路由
+      gridState: false,
+      manageState: false,
+      leaderState: false,
+      searchState: false,
+      gridDetailState: false
     }
   },
   computed: {
@@ -58,39 +61,50 @@ export default {
       } else {
           return {}
       }
+    },
+    defaultActive() {
+      return this.$route.path
     }
   },
   created() {
-    this.getRouter()
-    // this.getLoginUser()
-    
+    // this.getRouter()
+    this.getLoginUser()
   },
   methods: {
-    getRouter () {
-      this.defaultActive = this.$route.path
-    },
+    // getRouter () {
+    //   this.defaultActive = this.$route.path
+    // },
     //获取登录用户信息
-    // getLoginUser () {
-    //   console.log(this.userData)
-    //   let params = {
-    //       userName: this.userData.userName
-    //   }
-    //   this.$axios
-    //     .post('/user/getLoginUser', params)
-    //     .then(res => {
-    //         if(res.data.code === 200) {
-    //           // 根据权限显示不同的页面
-    //           // if (res.data.user[0].role === 'administrator') {
-    //           //   this.manageState = true
-    //           // } else if (res.data.user[0].role === '网格员用户') {
-    //           //   this.gridState = true
-    //           // } else {
-    //           //   this.manageState = false
-    //           //   this.gridState = false
-    //           // }
-    //         }
-    //     })
-    // }
+    getLoginUser () {
+      let params = {
+          userName: this.userData.userName
+      }
+      this.$axios
+        .post('/user/getLoginUser', params)
+        .then(res => {
+            if(res.data.code === 200) {
+              // 根据权限显示不同的页面
+              if (res.data.user[0].role === 'administrator') {
+                this.$router.push('/information/searchPort')
+                this.manageState = true
+                this.searchState = true
+                this.leaderState= true
+              } else if (res.data.user[0].role === '网格员用户') {
+                this.gridState = true
+              } else if (res.data.user[0].role === 'gridManager') {
+                this.gridState = true
+                this.gridDetailState = true
+              } else if (res.data.user[0].role === '查询用户') {
+                this.$router.push('/information/searchPort')
+                this.searchState = true
+              } else {
+                this.$router.push('/information/searchPort')
+                this.searchState = true
+                this.leaderState = true
+              }
+            }
+        })
+    }
   },
 }
 </script>

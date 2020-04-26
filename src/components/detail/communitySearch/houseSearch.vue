@@ -25,6 +25,7 @@
     </div>
     <div class="houseSearch_content">
       <el-button type="primary" size="small" style="margin-left:24px" @click="exportMeth">数据导出</el-button>
+      <el-button type="primary" size="small" v-if="returnState" @click="returnMain">返回</el-button>
       <!-- 表格 -->
       <div class="table_pzp">
         <div class="user_tableContent">
@@ -75,6 +76,7 @@ import { Message } from 'element-ui'
 export default {
   data() {
     return {
+      returnState: false,
       loading: false,
       tableData: [],
       tableData1: [],
@@ -99,6 +101,9 @@ export default {
     pagination
   },
   created() {
+    if (this.$route.path === '/information/girdPort') {
+      this.returnState = true
+    }
     this.getHouses()
   },
   computed: {
@@ -107,6 +112,12 @@ export default {
     }
   },
   methods: {
+    returnMain() {
+      this.$router.push('/information/searchPort')
+      setTimeout(() => {
+        this.$router.push('/information/girdPort')
+      }, 50);
+    },
     getRowKeys(row) {
       return row._id
     },

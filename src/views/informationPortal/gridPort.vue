@@ -11,20 +11,24 @@
     </div>
     <div class="gridPort_content">
       <div id="gridPort_main" style="width:700px;height: 470px" v-if="mainState"></div>
-        <communityInfo v-if="communityState"></communityInfo>
-        <houseInfo v-if="houseState"></houseInfo>
-        <carInfo v-if="carState"></carInfo>
-        <personInfo v-if="personState"></personInfo>
-        <userInfoSearch v-if="userState"></userInfoSearch>
+        <gridCommunity v-if="communityState"></gridCommunity>
+        <houseSearch v-if="houseState"></houseSearch>
+        <carSearch v-if="carState"></carSearch>
+        <personSearch v-if="personState"></personSearch>
       </div>
-      <div class="gridNotice" style="width:400px;height: 600px">
+      <div class="gridNotice" style="width:470px;height: 600px" v-if="mainState">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>系统通知</span>
-            <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
+            <span>你的任务</span>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="pushTasks">>>全部任务</el-button>
           </div>
-          <div v-for="o in 4" :key="o" style="margin-top:10px">
-            {{'列表内容 ' + o }}
+          <template v-if="!gridState">
+            <div v-for="(i,index) in tableData" :key="index" style="margin-top:10px">
+              {{(index+1) + ': ' + i.gridRange + ' ' + i.taskType + '任务' + ' '}}<span style=" margin-left:20px">{{ '任务状态: ' + i.process + ' ' + i.checked}}</span>
+            </div>
+          </template>
+          <div style="margin-top:10px" v-if="gridState">
+              <h3 style="margin-left:100px">你好！网格管理员{{loginUser.name}}</h3>
           </div>
         </el-card>
       </div>
@@ -32,11 +36,10 @@
 </template>
 
 <script>
-import houseInfo from '@/components/detail/infomationDetail/houseInfo'
-import carInfo from '@/components/detail/infomationDetail/carInfo'
-import personInfo from '@/components/detail/infomationDetail/personInfo'
-import userInfoSearch from '@/components/detail/infomationDetail/userInfoSearch'
-import communityInfo from '@/components/detail/infomationDetail/communityInfo'
+import houseSearch from '@/components/detail/communitySearch/houseSearch'
+import carSearch from '@/components/detail/communitySearch/carSearch'
+import personSearch from '@/components/detail/communitySearch/personSearch'
+import gridCommunity from '@/components/detail/infomationDetail/gridCommunity'
 export default {
   data() {
     return {
@@ -46,25 +49,28 @@ export default {
       personState: false,
       userState: false,
       communityState: false,
+      gridState: false,
+      tableData: [],
       role: '',
       totalObj:{
         communityTotal: '',
         houseTotal: '',
         carTotal: '',
         personTotal: ''
-      },
-      echartsData: [],
+      }
     }
   },
   components: {
-    houseInfo,
-    carInfo,
-    personInfo,
-    userInfoSearch,
-    communityInfo
+    houseSearch,
+    carSearch,
+    personSearch,
+    gridCommunity
   },
   created() {
-    this.getInfos()
+    setTimeout(() => {
+      this.getInfos()
+      this.getTasks()
+    },500)
     for (let i in this.loginUser.insideData) {
       if (this.loginUser.insideData[i].gridNum) {
         this.role = this.loginUser.insideData[i].gridRange
@@ -131,6 +137,33 @@ export default {
         })
     },
 
+    pushTasks () {
+      this.$router.push('/comprehensive/taskManage')
+    },
+
+    // 获取任务列表
+    // 获取任务列表
+    async getTasks () {
+      if (this.loginUser.role === 'gridManager') {
+        this.gridState = true
+      } else {
+        var query1 = {
+          gridPerson: this.loginUser.name
+        }
+      }
+      let params = {
+        query: query1
+      }
+      await this.$axios
+        .post('/task/getTasks', params)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.tableData = res.data.task
+            console.log(this.tableData)
+          }
+        })
+    },
+
     //初始化数据
     initData() {
       // 基于准备好的dom，初始化echarts实例
@@ -152,7 +185,7 @@ export default {
               x: 'center',//'center' | 'right' | {number}     
               y: 'bottom', //'center' | 'bottom' | {number}     
               y: '390px',
-              data: ['房屋总数','人员总数','小区总数','管理员总数','车辆总数']
+              data: ['房屋总数','人员总数','小区总数','车辆总数']
           },
           series : []
           // 写在series里面
@@ -172,8 +205,21 @@ export default {
           //   }
           // }
       })
+      for (let i in this.loginUser.insideData) {
+        if (this.loginUser.insideData[i].gridNum) {
+          var gridNum1 = this.loginUser.insideData[i].gridNum
+          var gridRange1 = this.loginUser.insideData[i].gridRange
+          break
+        }
+      }
+      let query1 = {}
+      query1.gridRange = gridRange1
+      query1.gridNum = gridNum1
+      let params = {
+        query: query1
+      }
       this.$axios
-        .post('/records/getTotals', {})
+        .post('/records/getNowTotals', params)
         .then(res => {
           if (res.data.code === 200) {
             myChart.setOption({
@@ -202,8 +248,6 @@ export default {
           this.personState = true
         } else if (param.name === '小区总数') {
           this.communityState = true
-        } else if (param.name === '管理员总数') {
-          this.userState = true
         } else {
           this.carState = true
         }

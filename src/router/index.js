@@ -67,7 +67,7 @@ const routes = [
         component: () => import('../views/comprehensive/taskManage.vue')
       },
       {
-        path: '/comprehensive/personAssessment', // 任务管理
+        path: '/comprehensive/personAssessment', // 人员审核
         name: 'personAssessment',
         component: () => import('../views/comprehensive/personAssessment.vue')
       },
