@@ -32,15 +32,20 @@ const routes = [
         name: 'logAudit',
         component: () => import('../views/systemSet/logAudit.vue')
       },
-      {
-        path: '/system/mechanism',  // 机构管理页面
-        name: 'mechanism',
-        component: () => import('../views/systemSet/mechanism.vue')
-      },
+      // {
+      //   path: '/system/mechanism',  // 机构管理页面
+      //   name: 'mechanism',
+      //   component: () => import('../views/systemSet/mechanism.vue')
+      // },
       {
         path: '/system/dictionary',  // 字典维护页面
         name: 'dictionary',
         component: () => import('../views/systemSet/dictionary.vue')
+      },
+      {
+        path: '/system/dataManage',  // 数据管理页面
+        name: 'dataManage',
+        component: () => import('../views/systemSet/dataManage.vue')
       },
 
       // 小区治理

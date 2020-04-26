@@ -9,8 +9,8 @@
         <template slot="title"><span>信息门户</span></template>
         <el-menu-item-group>
           <el-menu-item index="/information/girdPort" v-if="gridState">网格门户</el-menu-item>
-          <el-menu-item index="/information/searchPort" v-if="searchState">查询门户</el-menu-item>
           <el-menu-item index="/information/leaderPort" v-if="leaderState">领导大屏</el-menu-item>
+          <el-menu-item index="/information/searchPort" v-if="searchState">查询门户</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2" v-if="gridState">
@@ -32,13 +32,13 @@
         <template slot="title"><span>系统管理</span></template>
         <el-menu-item-group>
           <el-menu-item index="/system/userManage">用户管理</el-menu-item>
-          <el-menu-item index="/system/mechanism">机构管理</el-menu-item>
           <el-menu-item index="/system/dictionary">字典维护</el-menu-item>
-          <el-menu-item index="/system/dictionary">数据管理</el-menu-item>
+          <el-menu-item index="/system/dataManage">数据管理</el-menu-item>
           <el-menu-item index="/system/logAudit">日志审计</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
     </el-menu>
+    <!-- <el-menu-item index="/system/mechanism">机构管理</el-menu-item> -->
   </div>
 </template>
 
@@ -47,11 +47,11 @@ export default {
   data() {
     return {
       // defaultActive: '', // 当前激活的路由
-      gridState: false,
-      manageState: false,
-      leaderState: false,
-      searchState: false,
-      gridDetailState: false
+      gridState: true,
+      manageState: true,
+      leaderState: true,
+      searchState: true,
+      gridDetailState: true
     }
   },
   computed: {
@@ -98,7 +98,7 @@ export default {
                 this.$router.push('/information/searchPort')
                 this.searchState = true
               } else {
-                this.$router.push('/information/searchPort')
+                this.$router.push('/information/leaderPort')
                 this.searchState = true
                 this.leaderState = true
               }

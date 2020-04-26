@@ -142,7 +142,6 @@ export default {
     },
 
     // 获取任务列表
-    // 获取任务列表
     async getTasks () {
       if (this.loginUser.role === 'gridManager') {
         this.gridState = true
@@ -159,7 +158,6 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             this.tableData = res.data.task
-            console.log(this.tableData)
           }
         })
     },
