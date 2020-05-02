@@ -126,4 +126,9 @@ h1, h2, h3 {
     }
   }
 }
+
+// 表格间隙背景
+.el-table th.gutter, .el-table td.gutter {
+  background-color: rgba(232, 232, 232, 1);
+}
 </style>

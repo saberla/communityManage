@@ -5,13 +5,16 @@
     </div>
     <div class="comInfoSearch_content">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="房屋查询" name="first">
+        <el-tab-pane label="小区查询" name="first">
+          <communitySearch></communitySearch>
+        </el-tab-pane>
+        <el-tab-pane label="房屋查询" name="second">
           <houseSearch></houseSearch>
         </el-tab-pane>
-        <el-tab-pane label="人员查询" name="second">
+        <el-tab-pane label="人员查询" name="third">
           <personSearch></personSearch>
         </el-tab-pane>
-        <el-tab-pane label="车辆查询" name="third">
+        <el-tab-pane label="车辆查询" name="fourth">
           <carSearch></carSearch>
         </el-tab-pane>
       </el-tabs>
@@ -20,6 +23,7 @@
 </template>
 
 <script>
+import communitySearch from '@/components/detail/communitySearch/communitySearch'
 import houseSearch from '@/components/detail/communitySearch/houseSearch'
 import carSearch from '@/components/detail/communitySearch/carSearch'
 import personSearch from '@/components/detail/communitySearch/personSearch'
@@ -32,7 +36,8 @@ export default {
   components: {
     houseSearch,
     personSearch,
-    carSearch
+    carSearch,
+    communitySearch
   }
 }
 

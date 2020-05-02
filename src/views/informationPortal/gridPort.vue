@@ -1,7 +1,7 @@
 <template>
   <div class="gridPort">
     <div class="gridPort_header" style="text-align:center">
-      <h2 class="header">新都区网格门户-{{role}}</h2>
+      <h2 class="header">新都区网格门户</h2>
       <p>
         <span class="totalWord">小区总数:<span class="totalCount">{{totalObj.communityTotal}}</span></span>
         <span class="totalWord">房屋总数:<span class="totalCount">{{totalObj.houseTotal}}</span></span>
@@ -19,7 +19,8 @@
       <div class="gridNotice" style="width:470px;height: 600px" v-if="mainState">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>你的任务</span>
+            <span v-if="!gridState">你的任务</span>
+            <span v-if="gridState">待审核任务</span>
             <el-button style="float: right; padding: 3px 0" type="text" @click="pushTasks">>>全部任务</el-button>
           </div>
           <template v-if="!gridState">
@@ -27,9 +28,11 @@
               {{(index+1) + ': ' + i.gridRange + ' ' + i.taskType + '任务' + ' '}}<span style=" margin-left:20px">{{ '任务状态: ' + i.process + ' ' + i.checked}}</span>
             </div>
           </template>
-          <div style="margin-top:10px" v-if="gridState">
-              <h3 style="margin-left:100px">你好！网格管理员{{loginUser.name}}</h3>
-          </div>
+          <template v-if="gridState">
+            <div v-for="(i,index) in tableData1" :key="index" style="margin-top:10px">
+              {{(index+1) + ': ' + i.gridRange + ' ' + i.taskType + '任务' + ' '}}<span style=" margin-left:20px">{{ '任务状态: ' + i.process + ' ' + i.checked}}</span>
+            </div>
+          </template>
         </el-card>
       </div>
   </div>
@@ -51,7 +54,7 @@ export default {
       communityState: false,
       gridState: false,
       tableData: [],
-      role: '',
+      tableData1: [],
       totalObj:{
         communityTotal: '',
         houseTotal: '',
@@ -70,16 +73,13 @@ export default {
     setTimeout(() => {
       this.getInfos()
       this.getTasks()
-    },500)
-    for (let i in this.loginUser.insideData) {
-      if (this.loginUser.insideData[i].gridNum) {
-        this.role = this.loginUser.insideData[i].gridRange
-        break
-      }
-    }
+      this.getManagerTasks()
+    },700)
   },
   mounted() {
-    this.initData()
+    setTimeout(() => {
+      this.initData()
+    },700)
   },
   computed: {
     loginUser() {
@@ -158,6 +158,25 @@ export default {
         .then(res => {
           if (res.data.code === 200) {
             this.tableData = res.data.task
+          }
+        })
+    },
+
+    async getManagerTasks () {
+      if (this.loginUser.role === 'gridManager') {
+        this.gridState = true
+      }
+      var query1 = {
+        checked: '未审核'
+      }
+      let params = {
+        query: query1
+      }
+      await this.$axios
+        .post('/task/getTasks', params)
+        .then(res => {
+          if (res.data.code === 200) {
+            this.tableData1 = res.data.task
           }
         })
     },

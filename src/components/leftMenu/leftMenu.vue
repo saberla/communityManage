@@ -47,11 +47,11 @@ export default {
   data() {
     return {
       // defaultActive: '', // 当前激活的路由
-      gridState: true,
-      manageState: true,
-      leaderState: true,
-      searchState: true,
-      gridDetailState: true
+      gridState: false,
+      manageState: false,
+      leaderState: false,
+      searchState: false,
+      gridDetailState: false
     }
   },
   computed: {

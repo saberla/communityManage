@@ -1,7 +1,7 @@
 <template>
   <div class="leaderPort">
     <div class="leaderPort_header" style="text-align:center">
-      <h2 class="header">新都小区治理数据库</h2>
+      <h2 class="header">新都社区治理数据库</h2>
       <p>
         <span class="totalWord">小区总数:<span class="totalCount">{{totalObj.communityTotal}}</span></span>
         <span class="totalWord">房屋总数:<span class="totalCount">{{totalObj.houseTotal}}</span></span>
@@ -11,7 +11,12 @@
       </p>
     </div>
     <div id="leaderPort_content">
-      <div id="leaderPort_main" style="width:100%;height: 470px" v-if="mainState"></div>
+      <div class="leaderPortLeft" style="position:fixed; top:200px">
+        <div id="leaderPort_main" style="width: 500px;height: 470px" v-if="mainState"></div>
+      </div>
+      <div class="leaderPortRight" style="position:fixed; top:200px; right:90px">
+        <div id="leaderPortRight" style="width: 500px;height: 470px" v-if="mainState"></div>
+      </div>
       <communityInfo v-if="communityState"></communityInfo>
       <houseInfo v-if="houseState"></houseInfo>
       <carInfo v-if="carState"></carInfo>
@@ -156,7 +161,7 @@ export default {
           if (res.data.code === 200) {
             myChart.setOption({
               series: [{
-                name: '小区治理',
+                name: '社区治理',
                 type: 'pie',
                 radius : '50%',
                 center: ['50%', '40%'],
@@ -186,6 +191,74 @@ export default {
           this.carState = true
         }
       })
+      // 基于准备好的dom，初始化echarts实例
+      var myChart1 = this.$echarts.init(document.getElementById('leaderPortRight'));
+      myChart1.setOption({
+        title : {
+            text: '新都街道综治中心',//主标题
+            x:'center',//x轴方向对齐方式
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} </br>{b} : {c} ({d}%)",
+            backgroundColor: 'rgba(44, 136, 212, 0.7)'
+        },
+        legend: {},
+        series : []
+      })
+      let query1 = {
+        role: '网格员用户'
+      }
+      let params = {
+        query: query1
+      }
+      let objs = {}
+      let arr = []
+      let arr1 = []
+      this.$axios
+        .post('/user/getUsers', params)
+        .then(res => {
+          if (res.data.code === 200) {
+            for (let i in res.data.user) {
+              if (res.data.user[i].insideData.length !== 0) {
+                for (let j in res.data.user[i].insideData) {
+                  if (res.data.user[i].insideData[j].gridNum) {
+                    objs = {}
+                    objs.name = res.data.user[i].insideData[j].gridRange
+                    objs.value = 1
+                    arr1.push(res.data.user[i].insideData[j].gridRange)
+                    arr.push(objs)
+                  }
+                }
+              }
+            }
+            this.echartsData = arr
+            myChart1.setOption({
+              legend: {
+                  orient: 'horizontal', // vertical horizontal
+                  // top: 'bottom',
+                  x: 'center',//'center' | 'right' | {number}     
+                  y: 'bottom', //'center' | 'bottom' | {number}     
+                  y: '390px',
+                  data: arr1
+              },
+              series: [{
+                name: '社区治理',
+                type: 'pie',
+                radius : '50%',
+                center: ['50%', '40%'],
+                data: arr,
+                itemStyle: {
+                  emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'silver'
+                  }
+                }
+              }]
+            })
+          }
+        })
     }
   }
 }
