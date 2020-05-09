@@ -22,6 +22,7 @@
       <carInfo v-if="carState"></carInfo>
       <personInfo v-if="personState"></personInfo>
       <userInfoSearch v-if="userState"></userInfoSearch>
+      <leaderDetail v-if="leaderState" :parent='parentValue'></leaderDetail>
     </div>
   </div>
 </template>
@@ -32,15 +33,18 @@ import carInfo from '@/components/detail/infomationDetail/carInfo'
 import personInfo from '@/components/detail/infomationDetail/personInfo'
 import userInfoSearch from '@/components/detail/infomationDetail/userInfoSearch'
 import communityInfo from '@/components/detail/infomationDetail/communityInfo'
+import leaderDetail from '@/components/detail/leaderDetail/leaderDetail'
 export default {
   data() {
     return {
-      mainState: true,
-      houseState: false,
-      carState: false,
-      personState: false,
-      userState: false,
-      communityState: false,
+      mainState: true,  // 主页面状态
+      houseState: false, // 房屋状态
+      carState: false,  // 车辆状态
+      personState: false, // 人员状态
+      userState: false, // 管理员用户状态
+      communityState: false, // 小区详情状态
+      leaderState: false, // 按网格区查看状态
+      parentValue: '', // 传给组件的值
       totalObj:{
         communityTotal: '',
         houseTotal: '',
@@ -48,7 +52,6 @@ export default {
         personTotal: '',
         userTotal: ''
       },
-      echartsData: [],
     }
   },
   components: {
@@ -56,7 +59,8 @@ export default {
     carInfo,
     personInfo,
     userInfoSearch,
-    communityInfo
+    communityInfo,
+    leaderDetail
   },
   created() {
     this.getInfos()
@@ -232,7 +236,6 @@ export default {
                 }
               }
             }
-            this.echartsData = arr
             myChart1.setOption({
               legend: {
                   orient: 'horizontal', // vertical horizontal
@@ -259,6 +262,11 @@ export default {
             })
           }
         })
+      myChart1.on('click', (param) => {
+        this.mainState = false
+        this.leaderState = true
+        this.parentValue = param.name
+      })
     }
   }
 }

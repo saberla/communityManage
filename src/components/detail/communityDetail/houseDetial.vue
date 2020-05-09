@@ -1,7 +1,8 @@
 <template>
   <div class="house">
     <div class="addHouse">
-      <el-button type="primary" size="mini" style="margin-left:24px" @click="addHouse" v-if="loginUser.role !== 'gridManager'">房屋建档</el-button>
+      <el-button type="primary" style="margin-left:24px" size="small" v-if="loginUser.role === '领导'" @click="exportMeth">数据导出</el-button>
+      <el-button type="primary" size="mini" style="margin-left:24px" @click="addHouse" v-if="loginUser.role === '网格员用户'">房屋建档</el-button>
     </div>
     <!-- 表格 -->
     <div class="table_pzp">
@@ -10,16 +11,18 @@
           v-loading="loading"
           ref="multipleTable"
           :data="tableData"
+          @selection-change="handleSelectionChange"
           :header-cell-style="{'background-color':'rgba(232, 232, 232, 1)','color':'rgba(90, 90, 90, 1)'}"
           style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
+          <el-table-column type="selection" width="55" v-if="loginUser.role === '领导'"></el-table-column>
           <el-table-column prop="houseNum" label="门牌号" width="196"></el-table-column>
           <el-table-column prop="houseSize" label="房屋面积" width="231"></el-table-column>
           <el-table-column prop="houseHolder" label="户主" width="231"></el-table-column>
-          <el-table-column prop="date" label="建档日期" width="231"></el-table-column>
-          <el-table-column label="操作" fixed="right">
+          <el-table-column prop="date" label="建档日期" :width="loginUser.role === '网格员用户' ? '231' : ''"></el-table-column>
+          <el-table-column label="操作" fixed="right" v-if="loginUser.role === '网格员用户'">
             <template slot-scope="scope">
               <div>
-                <el-button size="mini" type="primary" @click="modHouse(scope.row)">
+                <el-button size="mini" type="primary" @click="modHouse(scope.row)" v-if="loginUser.role === '网格员用户'">
                   编辑
                 </el-button>
               </div>
@@ -84,16 +87,32 @@
         ><el-button @click="modHouseFinal('mod_form')" type="primary" size="medium" style="width:78px;margin-left:10px">确认</el-button>
       </span>
     </el-dialog>
+
+    <el-table
+      v-show="false"
+      id='houseLeadertable'
+      :data="tableData1"
+      @selection-change="handleSelectionChange"
+      :header-cell-style="{'background-color':'rgba(232, 232, 232, 1)','color':'rgba(90, 90, 90, 1)'}"
+      style="width: 100%;border-bottom:1px solid rgba(217,217,217,1)">
+      <el-table-column prop="houseNum" label="门牌号" width="196"></el-table-column>
+      <el-table-column prop="houseSize" label="房屋面积" width="231"></el-table-column>
+      <el-table-column prop="houseHolder" label="户主" width="231"></el-table-column>
+      <el-table-column prop="date" label="建档日期" :width="loginUser.role === '网格员用户' ? '231' : ''"></el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script>
+import FileSaver from 'file-saver'
+import XLSX from 'xlsx'
 import { Message } from 'element-ui'
 import pagination from '../../pagination/pagination'
 export default {
   data () {
     return {
       tableData: [],
+      tableData1: [], // 导出表格的数据
       loading: false,
       addDialogVisible: false,
       modDialogVisible: false,
@@ -181,6 +200,26 @@ export default {
     }
   },
   methods: {
+    handleSelectionChange(val) {
+      this.tableData1 = val
+    },
+    // 导出选中的表格
+    exportMeth() {
+      if (this.tableData1.length !== 0) {
+        let wb = XLSX.utils.table_to_book(document.querySelector('#houseLeadertable'));   // 这里就是表格
+        let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+        try {
+          FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '房屋建档信息.xlsx');  //table是自己导出文件时的命名，随意
+        } catch (e) {
+          console.log(e, wbout)
+        }
+        this.loginUser.operate = '领导-小区数据导出'
+        this.writeOpLog(this.loginUser)
+        return wbout
+      } else {
+        Message.error('请选择需要导出的数据')
+      }
+    },
     // 获取当前小区的房屋信息
     getHouses () {
       let params = {

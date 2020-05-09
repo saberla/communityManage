@@ -6,7 +6,7 @@
     <div class="community_content" v-if="!detailState">
       <h2 style="diplay:inline-block;text-align:center">成都市新都区 小区信息统计</h2>
       <div class="communityBtn" style="padding-left:24px;padding-top:12px">
-        <el-button type="primary" @click="addCommunity()" size="mini" v-if="loginUser.role !== 'gridManager'">新增小区</el-button>
+        <el-button type="primary" @click="addCommunity()" size="mini" v-if="loginUser.role === '网格员用户'">新增小区</el-button>
       </div>
       <div class="table_pzp">
         <el-table
@@ -22,13 +22,13 @@
           <el-table-column label="操作" fixed="right">
             <template slot-scope="scope">
               <div>
-                <el-button class="short_btn" size="mini" type="primary" v-if="loginUser.role !== 'gridManager'" @click="editMeth(scope.row)">
+                <el-button class="short_btn" size="mini" type="primary" v-if="loginUser.role === '网格员用户'" @click="editMeth(scope.row)">
                   编辑
                 </el-button
                 ><el-button class="long_btn" size="mini"  @click="openDetail(scope.row)">
                   详情
                 </el-button
-                ><el-button class="short_btn" size="mini" v-if="loginUser.role !== 'gridManager'"  @click="delMeth(scope.row)">
+                ><el-button class="short_btn" size="mini" v-if="loginUser.role === '网格员用户'"  @click="delMeth(scope.row)">
                   删除
                 </el-button>
               </div>

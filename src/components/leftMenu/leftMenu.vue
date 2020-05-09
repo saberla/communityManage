@@ -5,7 +5,7 @@
       :default-active="defaultActive"
       class="el-menu-vertical-demo"
       unique-opened>
-      <el-submenu index="1">
+      <el-submenu index="1" v-if="!manageState">
         <template slot="title"><span>信息门户</span></template>
         <el-menu-item-group>
           <el-menu-item index="/information/girdPort" v-if="gridState">网格门户</el-menu-item>
@@ -85,22 +85,20 @@ export default {
             if(res.data.code === 200) {
               // 根据权限显示不同的页面
               if (res.data.user[0].role === 'administrator') {
-                this.$router.push('/information/searchPort')
                 this.manageState = true
-                this.searchState = true
-                this.leaderState= true
+                this.$router.push('/system/userManage')
               } else if (res.data.user[0].role === '网格员用户') {
                 this.gridState = true
               } else if (res.data.user[0].role === 'gridManager') {
                 this.gridState = true
                 this.gridDetailState = true
               } else if (res.data.user[0].role === '查询用户') {
-                this.$router.push('/information/searchPort')
                 this.searchState = true
+                this.$router.push('/information/searchPort')
               } else {
-                this.$router.push('/information/leaderPort')
                 this.searchState = true
                 this.leaderState = true
+                this.$router.push('/information/leaderPort')
               }
             }
         })

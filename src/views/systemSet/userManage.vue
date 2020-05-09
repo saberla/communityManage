@@ -256,10 +256,10 @@ export default {
             }
           },
           required: true,
-          trigger: 'blur'
+          trigger: 'change'
         }],
-        nation: [{ required: true, message: '请选择民族', trigger: 'blur' }],
-        education: [{ required: true, message: '请选择最高学历', trigger: 'blur' }]
+        nation: [{ required: true, message: '请选择民族', trigger: 'change' }],
+        education: [{ required: true, message: '请选择最高学历', trigger: 'change' }]
       },
       // 修改用户规则验证
       modRules: {
@@ -296,8 +296,8 @@ export default {
           required: true,
           trigger: 'change'
         }],
-        nation: [{ required: true, message: '请选择民族', trigger: 'blur' }],
-        education: [{ required: true, message: '请选择最高学历', trigger: 'blur' }]
+        nation: [{ required: true, message: '请选择民族', trigger: 'change' }],
+        education: [{ required: true, message: '请选择最高学历', trigger: 'change' }]
       }
     }
   },
