@@ -43,10 +43,10 @@
         :append-to-body="true">
         <el-form ref="pass_form" v-if="modPassVisible" :model="password_data" label-width="100px" :rules="passRules">
           <el-form-item label="设置新密码：" prop="newPass">
-            <el-input v-model="password_data.newPass" placeholder="请输入新密码"></el-input>
+            <el-input v-model="password_data.newPass" placeholder="请输入新密码" show-password></el-input>
           </el-form-item>
           <el-form-item label="确认新密码：" prop="confirmNew">
-            <el-input v-model="password_data.confirmNew" placeholder="确认新密码"></el-input>
+            <el-input v-model="password_data.confirmNew" placeholder="确认新密码" show-password></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -224,6 +224,12 @@ export default {
 .passWord{
   .el-dialog__wrapper .el-input__inner{
     width: 280px !important;
+  }
+}
+.el-dialog__wrapper {
+  .el-input .el-input__clear {
+    position: absolute;
+    right: 62px;
   }
 }
 </style>
