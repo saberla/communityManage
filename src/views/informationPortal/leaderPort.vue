@@ -195,6 +195,8 @@ export default {
           this.carState = true
         }
       })
+
+      
       // 基于准备好的dom，初始化echarts实例
       var myChart1 = this.$echarts.init(document.getElementById('leaderPortRight'));
       myChart1.setOption({

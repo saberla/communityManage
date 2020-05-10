@@ -1,6 +1,7 @@
 <template>
   <div class="leftMenu">
     <el-menu
+      v-if="!manageState"
       router
       :default-active="defaultActive"
       class="el-menu-vertical-demo"
@@ -28,7 +29,17 @@
           <el-menu-item index="/comprehensive/personAssessment">人员考核</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
-      <el-submenu index="4" v-if="manageState">
+    </el-menu>
+
+    <!-- 系统设置 -->
+    <el-menu
+      v-if="manageState"
+      :default-openeds="['4']"
+      router
+      :default-active="defaultActive"
+      class="el-menu-vertical-demo"
+      unique-opened>
+      <el-submenu index="4">
         <template slot="title"><span>系统管理</span></template>
         <el-menu-item-group>
           <el-menu-item index="/system/userManage">用户管理</el-menu-item>

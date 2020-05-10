@@ -70,70 +70,80 @@ export default {
     gridCommunity
   },
   created() {
-    setTimeout(() => {
-      this.getInfos()
-      this.getTasks()
-      this.getManagerTasks()
-    },700)
+    this.getInfos()
+    this.getTasks()
+    this.getManagerTasks()
   },
   mounted() {
-    setTimeout(() => {
-      this.initData()
-    },700)
+    this.initData()
   },
   computed: {
-    loginUser() {
-      return this.$store.getters.getLoginUser
+    userData() {
+      if (this.$store.getters.userInfo) {
+          return this.$store.getters.userInfo
+      } else {
+          return {}
+      }
     }
   },
   methods: {
     // 获取初始数据并赋值
     // 获取管理员信息
-    async getInfos () {
-      for (let i in this.loginUser.insideData) {
-        if (this.loginUser.insideData[i].gridNum) {
-          var gridNum1 = this.loginUser.insideData[i].gridNum
-          var gridRange1 = this.loginUser.insideData[i].gridRange
-          break
-        }
+    getInfos () {
+      let params1 = {
+          userName: this.userData.userName
       }
-      let query1 = {}
-      query1.gridRange = gridRange1
-      query1.gridNum = gridNum1
-      let params = {
-        query: query1
-      }
-      // 获取小区人员信息
-      await this.$axios
-        .post('/persons/getInfoPersons', params)
+      this.$axios
+        .post('/user/getLoginUser', params1)
         .then(res => {
-          if (res.data.code === 200) {
-            this.totalObj.personTotal = res.data.totalCount
-          }
-        })
-      // 获取小区房屋信息
-      await this.$axios
-        .post('/house/getInfoHouses', params)
-        .then(res => {
-          if (res.data.code === 200) {
-            this.totalObj.houseTotal = res.data.totalCount
-          }
-        })
-      // 获取小区信息
-      await this.$axios
-        .post('/community/getSearchComs', params)
-        .then(res => {
-          if (res.data.code === 200) {
-            this.totalObj.communityTotal = res.data.totalCount
-          }
-        })
-      // 获取车辆信息
-      await this.$axios
-        .post('/cars/getInfoCars', params)
-        .then(res => {
-          if (res.data.code === 200) {
-            this.totalObj.carTotal = res.data.totalCount
-          }
+            if(res.data.code === 200) {
+              let loginUser = res.data.user[0]
+              for (let i in loginUser.insideData) {
+                if (loginUser.insideData[i].gridNum) {
+                  var gridNum1 = loginUser.insideData[i].gridNum
+                  var gridRange1 = loginUser.insideData[i].gridRange
+                  break
+                }
+              }
+              let query1 = {}
+              query1.gridRange = gridRange1
+              query1.gridNum = gridNum1
+              let params = {
+                query: query1
+              }
+              // 获取小区人员信息
+              this.$axios
+                .post('/persons/getInfoPersons', params)
+                .then(res => {
+                  if (res.data.code === 200) {
+                    this.totalObj.personTotal = res.data.totalCount
+                  }
+                })
+              // 获取小区房屋信息
+              this.$axios
+                .post('/house/getInfoHouses', params)
+                .then(res => {
+                  if (res.data.code === 200) {
+                    this.totalObj.houseTotal = res.data.totalCount
+                  }
+                })
+              // 获取小区信息
+              this.$axios
+                .post('/community/getSearchComs', params)
+                .then(res => {
+                  if (res.data.code === 200) {
+                    this.totalObj.communityTotal = res.data.totalCount
+                  }
+                })
+              // 获取车辆信息
+              this.$axios
+                .post('/cars/getInfoCars', params)
+                .then(res => {
+                  if (res.data.code === 200) {
+                    this.totalObj.carTotal = res.data.totalCount
+                  }
+                })
+            }
         })
     },
 
@@ -142,42 +152,62 @@ export default {
     },
 
     // 获取任务列表
-    async getTasks () {
-      if (this.loginUser.role === 'gridManager') {
-        this.gridState = true
-      } else {
-        var query1 = {
-          gridPerson: this.loginUser.name
-        }
+    getTasks () {
+      let params1 = {
+          userName: this.userData.userName
       }
-      let params = {
-        query: query1
-      }
-      await this.$axios
-        .post('/task/getTasks', params)
+      this.$axios
+        .post('/user/getLoginUser', params1)
         .then(res => {
-          if (res.data.code === 200) {
-            this.tableData = res.data.task
-          }
+            if(res.data.code === 200) {
+              let loginUser = res.data.user[0]
+              if (loginUser.role === 'gridManager') {
+                this.gridState = true
+              } else {
+                var query1 = {
+                  gridPerson: loginUser.name
+                }
+              }
+              let params = {
+                query: query1
+              }
+              this.$axios
+                .post('/task/getTasks', params)
+                .then(res => {
+                  if (res.data.code === 200) {
+                    this.tableData = res.data.task
+                  }
+                })
+            }
         })
     },
 
-    async getManagerTasks () {
-      if (this.loginUser.role === 'gridManager') {
-        this.gridState = true
+    getManagerTasks () {
+      let params1 = {
+          userName: this.userData.userName
       }
-      var query1 = {
-        checked: '未审核'
-      }
-      let params = {
-        query: query1
-      }
-      await this.$axios
-        .post('/task/getTasks', params)
+      this.$axios
+        .post('/user/getLoginUser', params1)
         .then(res => {
-          if (res.data.code === 200) {
-            this.tableData1 = res.data.task
-          }
+            if(res.data.code === 200) {
+              let loginUser = res.data.user[0]
+              if (loginUser.role === 'gridManager') {
+                this.gridState = true
+              }
+              var query1 = {
+                checked: '未审核'
+              }
+              let params = {
+                query: query1
+              }
+              this.$axios
+                .post('/task/getTasks', params)
+                .then(res => {
+                  if (res.data.code === 200) {
+                    this.tableData1 = res.data.task
+                  }
+                })
+            }
         })
     },
 
@@ -222,40 +252,50 @@ export default {
           //   }
           // }
       })
-      for (let i in this.loginUser.insideData) {
-        if (this.loginUser.insideData[i].gridNum) {
-          var gridNum1 = this.loginUser.insideData[i].gridNum
-          var gridRange1 = this.loginUser.insideData[i].gridRange
-          break
-        }
-      }
-      let query1 = {}
-      query1.gridRange = gridRange1
-      query1.gridNum = gridNum1
-      let params = {
-        query: query1
+      let params1 = {
+        userName: this.userData.userName
       }
       this.$axios
-        .post('/records/getNowTotals', params)
+        .post('/user/getLoginUser', params1)
         .then(res => {
-          if (res.data.code === 200) {
-            myChart.setOption({
-              series: [{
-                name: '小区治理',
-                type: 'pie',
-                radius : '50%',
-                center: ['50%', '40%'],
-                data: res.data.totalRes,
-                itemStyle: {
-                  emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'silver'
-                  }
+            if(res.data.code === 200) {
+              let loginUser = res.data.user[0]
+              for (let i in loginUser.insideData) {
+                if (loginUser.insideData[i].gridNum) {
+                  var gridNum1 = loginUser.insideData[i].gridNum
+                  var gridRange1 = loginUser.insideData[i].gridRange
+                  break
                 }
-              }]
-            })
-          }
+              }
+              let query1 = {}
+              query1.gridRange = gridRange1
+              query1.gridNum = gridNum1
+              let params = {
+                query: query1
+              }
+              this.$axios
+                .post('/records/getNowTotals', params)
+                .then(res => {
+                  if (res.data.code === 200) {
+                    myChart.setOption({
+                      series: [{
+                        name: '小区治理',
+                        type: 'pie',
+                        radius : '50%',
+                        center: ['50%', '40%'],
+                        data: res.data.totalRes,
+                        itemStyle: {
+                          emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'silver'
+                          }
+                        }
+                      }]
+                    })
+                  }
+                })
+            }
         })
       myChart.on('click', (param) => {
         this.mainState = false
