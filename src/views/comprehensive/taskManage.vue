@@ -107,12 +107,12 @@
                     撤回任务
                   </el-button
                   ><el-button size="mini" type="primary" v-if="scope.row.process == '进行中' && loginUser.name === scope.row.gridPerson" @click="finishTask(scope.row)">
-                    任务完成
+                    申报审核
                   </el-button
                   ><el-button size="mini" type="primary" v-if="scope.row.process === '已完成' && loginUser.userName === 'manage'" @click="judgeTask(scope.row)">
                     任务审核
                   </el-button
-                  ><el-button size="mini">
+                  ><el-button size="mini" @click="modTask(scope.row)">
                     详情
                   </el-button
                   ><el-button size="mini" v-if="loginUser.userName === 'manage'" @click="delMeth(scope.row)">
@@ -233,6 +233,54 @@
           ><el-button @click="judgeTaskFinal('jud_form')" type="primary" size="medium" style="width:78px;margin-left:10px">确认</el-button>
         </span>
       </el-dialog>
+
+      <!-- 详情dialog -->
+      <el-dialog
+        :close-on-click-modal="false"
+        title="任务详情"
+        :visible.sync="detailDialogVisible"
+        width="512px"
+        :append-to-body="true">
+        <el-form ref="detail_form" v-if="detailDialogVisible" :model="detail_dialogData" label-width="90px" :rules="modRules">
+          <el-form-item label="网格区域：" prop="gridRange">
+            <el-select v-model="detail_dialogData.gridRange" :disabled="loginUser.role !== 'gridManager'">
+              <el-option
+                v-for="item in gridRanges"
+                :key="item.id"
+                :label="item.option"
+                :value="item.option">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="网格任务：" prop="taskType">
+            <el-select v-model="detail_dialogData.taskType" :disabled="loginUser.role !== 'gridManager'">
+              <el-option
+                v-for="item in types"
+                :key="item.id"
+                :label="item.option"
+                :value="item.option">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="任务数量：" prop="taskAmount">
+            <el-input v-model.number="detail_dialogData.taskAmount" placeholder="请输入任务量" :disabled="loginUser.role !== 'gridManager'"></el-input>
+          </el-form-item>
+          <el-form-item label="负责人员：" prop="gridPerson">
+            <el-select v-model="detail_dialogData.gridPerson" :disabled="loginUser.role !== 'gridManager'">
+              <el-option
+                v-for="item in gridPersons"
+                :key="item.id"
+                :label="item.option"
+                :value="item.option">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="detailDialogVisible = false" class="tableBtn" size="medium" style="width:78px">取消</el-button
+          ><el-button @click="modTaskFinal('detail_form')" type="primary" size="medium" style="width:78px;margin-left:10px">确认</el-button>
+        </span>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -247,9 +295,13 @@ export default {
       tableData: [],
       loading: false,
       tempRow: '',
-      addDialogVisible: false,
-      modDialogVisible: false,
-      judgeDialogVisible: false,
+      addDialogVisible: false, // 新建任务dia
+      modDialogVisible: false, // 任务指派dia
+      judgeDialogVisible: false, // 任务审核dia
+      detailDialogVisible: false, // 详情dia
+      tempQuality: '',
+      tempProcess: '',
+      tempChecked: '',
       formData: {
         gridRange: '',
         taskType: '',
@@ -275,6 +327,12 @@ export default {
         gridPerson: ''
       },
       mod_dialogData: {
+        gridRange: '',
+        taskType: '',
+        taskAmount: '',
+        gridPerson: ''
+      },
+      detail_dialogData: {
         gridRange: '',
         taskType: '',
         taskAmount: '',
@@ -398,6 +456,56 @@ export default {
       })
     },
     
+    // 任务详情
+    modTask (row) {
+      this.tempProcess = row.process
+      this.tempChecked = row.checked
+      this.tempQuality = row.quality
+      this.detail_dialogData.gridRange = row.gridRange
+      this.detail_dialogData.taskType = row.taskType
+      this.detail_dialogData.gridPerson = row.gridPerson
+      this.detail_dialogData.taskAmount = Number(row.taskAmount)
+      this.tempRow = row
+      this.detailDialogVisible = true
+    },
+    modTaskFinal (formName) {
+      this.loginUser.operate = '综治管理-任务详情修改'
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.loginUser.role === 'gridManager') {
+            let params = {
+              id: JSON.parse(JSON.stringify(this.tempRow._id)),
+              quality: this.tempQuality,
+              process: this.tempProcess,
+              checked: this.tempChecked,
+              gridRange: this.detail_dialogData.gridRange,
+              taskType: this.detail_dialogData.taskType,
+              taskAmount: this.detail_dialogData.taskAmount,
+              gridPerson: this.detail_dialogData.gridPerson
+            }
+            this.$axios
+              .post('/task/assignTask', params)
+              .then(res => {
+                if (res.data.code === 200) {
+                  Message.success('修改成功')
+                  this.getTasks()
+                  this.writeOpLog(this.loginUser)
+                  this.detailDialogVisible = false
+                }
+              })
+              .catch(err => {
+                this.loginUser.wrongPlace = '综治管理-任务详情'
+                this.loginUser.wrongInfo = String(err)
+                this.writeSysLog(this.loginUser)
+                console.log('发生错误', err)
+              })
+          } else {
+            this.detailDialogVisible = false
+          }
+        }
+      })
+    },
+
     // 任务审核
     judgeTask(row) {
       this.jud_dialogData.quality = ''
