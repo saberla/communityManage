@@ -68,6 +68,17 @@ export default {
                           })
                         // token存到vuex
                         this.$store.dispatch('setUser', decode)
+                        // 第一次显示的角色和值
+                        let params = {
+                            userName: decode.userName
+                        }
+                        this.$axios
+                          .post('/user/getLoginUser', params)
+                          .then(res => {
+                              if(res.data.code === 200) {
+                                  this.$store.dispatch('setLoginUser', res.data.user[0])
+                              }
+                          })
                         this.$router.push('/mainPage')
                     } else if (res.data.code === 404) {
                         Message.error('用户不存在')
