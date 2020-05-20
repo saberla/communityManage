@@ -112,7 +112,7 @@ router.beforeEach((to, from, next) => {
     if (isLogin) {
       next()
     } else {
-      Message.error('token失效，请重新登录')
+      // Message.error('token失效，请重新登录')
       next('/')
     }
   }
