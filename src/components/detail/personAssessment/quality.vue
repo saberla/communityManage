@@ -110,9 +110,9 @@ export default {
               }
               for (let j in res.data.task) {
                 if (res.data.task[j].quality === '优') {
-                  sum += 3
+                  sum += 30
                 } else if (res.data.task[j].quality === '良') {
-                  sum += 2
+                  sum += 10
                 } else {
                   sum += 1
                 }
