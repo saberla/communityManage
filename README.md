@@ -1,5 +1,5 @@
 # communityManage
-毕设前端部分
+毕设社区综合治理管理系统前端部分
 =======
 # community_manage
 
